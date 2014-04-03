@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -24,6 +23,9 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use("/js", express.static(__dirname + '/js'));
+app.use("/css", express.static(__dirname + '/css'));
+app.use('/public', express.static(__dirname + '/public'));
 
 // development only
 if ('development' == app.get('env')) {
@@ -46,6 +48,16 @@ app.get('/', function (req, res){
 		thumb3 : 'suburbs.png',
 	});
 });
+
+app.get('/admin', function (req, res){
+			res.render('admin_index', {
+		});
+	});
+
+app.get('/admin_reset', function (req, res){
+			res.render('admin_reset', {
+		});
+	});
 
 app.get('/users', user.list);
 
