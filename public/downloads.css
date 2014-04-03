@@ -1,0 +1,297 @@
+/* ------------------------ RESET */
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0;	padding: 0;	border: 0; font-size: 100%;	font: inherit; vertical-align: baseline; } article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; } body { margin: 0px; padding: 0px; } ol, ul { list-style: none; } blockquote, q { quotes: none; } blockquote:before, blockquote:after, q:before, q:after { content: '';	content: none; } table { border-collapse: collapse;	border-spacing: 0; }
+
+/* -------------------------------------------------------------------------- STYLE */
+
+body, html {
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	background-color: #000000;
+	text-align: center;
+	color: #fff;
+	font: normal 700 25px/30px 'Ubuntu',"HelveticaNeueBold", "HelveticaNeue-Bold", "Helvetica Neue Bold", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosBold', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+	font-stretch: normal;
+}
+
+body#fmb {
+	background-color: #416865;
+}
+
+#container {
+	width: 100%;
+	height: 100%;
+	max-width: 960px;
+	margin: 0 auto;
+	position: relative;
+}
+
+#content {
+	z-index: 10;
+	width: 92%;
+	padding: 0 4%;
+	left: 0;
+	height: 330px;
+	position: absolute;
+	top: 50%;
+	margin-top: -175px;
+}
+
+#fmb #content {
+	z-index: 10;
+	width: 92%;
+	padding: 75px 4% 0;
+	left: auto;
+	height: auto;
+	position: relative;
+	top: auto;
+	margin-top: 0;
+}
+
+img#logo {
+	width: 100%;
+	max-width: 790px;
+	height: auto;
+}
+
+a, a:visited {
+	color: #FFF;
+}
+
+p {
+	margin: 40px 0;
+}
+
+p.small {
+	margin: 30px 0 0;
+	font-size: 14px;
+}
+
+form {
+	display: block;
+	position: relative;
+	text-align: center;
+	margin: 0 auto;
+	padding: 0;
+	height: 45px;
+	width: 520px;
+}
+
+input, textarea {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+}
+
+input[type="text"], input[type="email"] {
+	color: #2c524e;
+	float: left;
+	display: block;
+	text-align: center;
+	padding: 0 5px;
+	margin: 0;
+	border: 0;
+	border-radius: 4px;
+	-webkit-appearance: none;
+	width: 340px;
+	height: 45px;
+	font: normal 700 20px/45px 'Ubuntu', "HelveticaNeueBold", "HelveticaNeue-Bold", "Helvetica Neue Bold", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosBold', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+	font-stretch: normal;
+}
+
+::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
+    color: #bbb;
+	letter-spacing: 1px;
+}
+
+#mce-EMAIL::-webkit-input-placeholder, #mce-EMAIL:-moz-placeholder, #mce-EMAIL::-moz-placeholder, #mce-EMAIL:-ms-input-placeholder {
+    color: #a4b9b6;
+}
+
+input[type="submit"] {
+	float: right;
+	margin: 0;
+	padding: 0;
+	background-color: #ffffff;
+	border: 0;
+	border-radius: 4px;
+	color: #ad2365;
+	cursor: pointer;
+	display: block;
+	font: normal 700 20px/45px 'Ubuntu', "HelveticaNeueBold", "HelveticaNeue-Bold", "Helvetica Neue Bold", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosBold', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+	letter-spacing: 1px;
+	text-align: center;
+	text-decoration: none;
+	vertical-align: top;
+	white-space: nowrap;
+	width: 150px;
+	height: 45px;
+  -webkit-transition: all 0.3s ease-out; 
+     -moz-transition: all 0.3s ease-out; 
+       -o-transition: all 0.3s ease-out; 
+          transition: all 0.3s ease-out; 
+}
+
+input[type="submit"]:hover {
+	background-color: #ad2365;
+	color: #ffffff;
+  -webkit-transition: all 0.3s ease-out; 
+     -moz-transition: all 0.3s ease-out; 
+       -o-transition: all 0.3s ease-out; 
+          transition: all 0.3s ease-out; 
+}
+
+input[type="submit"].cam {
+	color: #4770d7;
+}
+
+input[type="submit"].cam:hover {
+	background-color: #4770d7;
+	color: #ffffff;
+  -webkit-transition: all 0.3s ease-out; 
+     -moz-transition: all 0.3s ease-out; 
+       -o-transition: all 0.3s ease-out; 
+          transition: all 0.3s ease-out; 
+}
+
+input[type="submit"].fmb {
+	color: #2c524e;
+}
+
+input[type="submit"].fmb:hover {
+	background-color: #2c524e;
+	color: #ffffff;
+}
+
+.clear {
+	clear: both;
+}
+
+
+.nav {
+  position: fixed;
+  top: 0px;
+  left:0px;
+  width: 100%;
+  z-index: 23;
+}
+
+.nav ul {
+  float: right;
+  margin: 0px;
+  padding: 0 13px 0 0;
+}
+  .nav li {
+    margin: 0px;
+    padding: 14px 14px 12px 14px;
+    float: left;
+    list-style: none;
+    font-weight: 100;
+    font-size: 14px;
+    line-height: 24px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+    .nav li:hover {
+      background: #2c524e;
+    }
+    .nav li.icon {
+      padding: 16px 7px 18px 7px;
+      line-height: 16px;
+    }
+      .nav a {
+        color: #fff;
+        text-decoration: none;
+      }
+        .nav.black a {
+          color: #222;
+        }
+          nav.black a:hover {
+            color: #fff;
+          }
+      li.icon a {
+        display: block;
+        width: 16px;
+        background: url(../img/radkeySocialIcons.png) 0 0 no-repeat;
+        font-size: 0;
+      }
+        li.icon a.twitter {
+          background: url(../img/radkeySocialIcons.png) -16px 0 no-repeat;
+        }
+        li.icon a.instagram {
+          background: url(../img/radkeySocialIcons.png) -32px 0 no-repeat;
+        }
+        li.icon a.vine {
+          background: url(../img/radkeySocialIcons.png) -48px 0 no-repeat;
+        }
+        li.icon a.youtube {
+          background: url(../img/radkeySocialIcons.png) -64px 0 no-repeat;
+        }
+        li.icon a.soundcloud {
+          background: url(../img/radkeySocialIcons.png) -80px 0 no-repeat;
+        }
+        .nav.black li.icon a {
+          background: url(../img/radkeySocialIcons.png) 0 -16px no-repeat;
+        }
+          .nav.black li.icon a.twitter {
+            background: url(../img/radkeySocialIcons.png) -16px -16px no-repeat;
+          }
+          .nav.black li.icon a.instagram {
+            background: url(../img/radkeySocialIcons.png) -32px -16px no-repeat;
+          }
+          .nav.black li.icon a.vine {
+            background: url(../img/radkeySocialIcons.png) -48px -16px no-repeat;
+          }
+          .nav.black li.icon a.youtube {
+            background: url(../img/radkeySocialIcons.png) -64px -16px no-repeat;
+          }
+          .nav.black li.icon a.soundcloud {
+            background: url(../img/radkeySocialIcons.png) -80px -16px no-repeat;
+          }
+
+
+@media only screen and (max-width: 566px), only screen and (max-device-width: 566px), only screen and (device-aspect-ratio: 2/3), only screen and (device-aspect-ratio: 40/71) {
+
+body {
+	font: normal 700 17px/20px 'Ubuntu',"HelveticaNeueBold", "HelveticaNeue-Bold", "Helvetica Neue Bold", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosBold', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+}
+
+#content {
+}
+
+p {
+	margin: 25px 0;
+}
+
+p.small {
+	margin: 25px 0 0;
+	font: normal 700 14px/14px 'Ubuntu',"HelveticaNeueBold", "HelveticaNeue-Bold", "Helvetica Neue Bold", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosBold', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+}
+
+form {
+	display: block;
+	position: relative;
+	text-align: center;
+	padding: 0;
+	height: auto;
+	width: 100%;
+}
+
+input[type="text"], input[type="email"] {
+	float: none;
+	padding: 0;
+	width: 100%;
+	font: normal 700 20px/30px 'Ubuntu', "HelveticaNeueBold", "HelveticaNeue-Bold", "Helvetica Neue Bold", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosBold', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+}
+
+
+input[type="submit"] {
+	float: none;
+	margin: 13px auto 0;
+	font: normal 700 20px/30px 'Ubuntu', "HelveticaNeueBold", "HelveticaNeue-Bold", "Helvetica Neue Bold", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosBold', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+	width: 100%;
+}
+
+}
