@@ -9,3 +9,7 @@
             <div class="embeddedVideo" id="video3">
                  <iframe id="vid3" width="560" height="315" src="http://www.youtube.com/embed/EcKinnMXuKg?&amp;autohide=1&amp;enablejsapi=1&amp;html5=1"></iframe> 
             </div> 
+
+
+
+       > db.youtubevids.find()
