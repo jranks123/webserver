@@ -4,6 +4,7 @@ $(function() {
 
 		$('#video1').hide();
 		$('#video2').hide();
+
 	});
 
 
@@ -103,6 +104,7 @@ $(function() {
 			
 		}
 	});
+
 
 
 

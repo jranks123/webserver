@@ -13,6 +13,8 @@
         <script src="videostuff.js"></script>
         <script src="konami.js"></script>
         <script src="selectivizr.js"></script>
+
+
         <!--[if IE]>
                 <link rel="stylesheet" type="text/css" href="ie.css" />
         <![endif]-->
@@ -260,13 +262,13 @@
 
           <div class="wrap">
            <div class="embeddedVideo" id="video1">
-               <iframe id="vid1" class='vid1' width="560" height="315" src="http://www.youtube.com/embed/8dqEJSTLOQM?&amp;autohide=1&amp;enablejsapi=1&amp;html5=1"></iframe> 
+               <iframe id="vid1" class='vid1' width="560" height="315" src="<%= url1%>?&amp;autohide=1&amp;enablejsapi=1&amp;html5=1"></iframe> 
             </div> 
             <div class="embeddedVideo" id="video2">
-               <iframe id="vid2" width="560" height="315" src="http://www.youtube.com/embed/T4JrQpzno5Y?&amp;autohide=1&amp;enablejsapi=1&amp;html5=1"></iframe> 
+               <iframe id="vid2" width="560" height="315" src="<%= url2%>?&amp;autohide=1&amp;enablejsapi=1&amp;html5=1"></iframe> 
             </div> 
             <div class="embeddedVideo" id="video3">
-                 <iframe id="vid3" width="560" height="315" src="http://www.youtube.com/embed/EcKinnMXuKg?&amp;autohide=1&amp;enablejsapi=1&amp;html5=1"></iframe> 
+                 <iframe id="vid3" width="560" height="315" src="<%= url3%>?&amp;autohide=1&amp;enablejsapi=1&amp;html5=1"></iframe> 
             </div> 
          </div>
          <!--[if !IE]><!-->
@@ -275,14 +277,14 @@
                 <li id="lb"><a href="javascript:void(0)" title="Scroll Right" class="leftButton"><img class = "borderless rel" id="leftbut" src="vid_left.png" alt="move to previous video"/></a></li> 
                
                 <li class="thumbnail afterlife">
-                     <img id="afterlife" class="thmb rel" src="afterlife.png" alt="Faline 1" />        
+                     <img id="afterlife" class="thmb rel" src = "<%= thumb1%>" alt="Faline 1" />        
 
                 </li>  
                  <li class="thumbnail rebellion">
-                    <img id="rebellion" class="thmb rel" src="rebellion.png"  alt="Faline 1" />
+                    <img id="rebellion" class="thmb rel" src = "<%= thumb2%>" alt="Faline 1" />
                 </li>
                 <li class="thumbnail suburbs">
-                    <img id ="suburbs" class="thmb rel" src="suburbs.png"  alt="Faline 1" />
+                    <img id ="suburbs" class="thmb rel" src = "<%= thumb3%>" alt="Faline 1" />
                 </li>  
 
                  <li id="rb"><a href="javascript:void(0)" title="Scroll Left" class="rightButton"><img class = "borderless rel" id="rightbut" src="vid_right.png" alt="move to next video" /></a>

@@ -11,10 +11,12 @@ var path = require('path');
 
 var app = express();
 
+app.engine('.html', require('ejs').__express);
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -28,9 +30,21 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+
+
 //app.get('/', routes.index);
 app.get('/', function (req, res){
-	res.sendfile (__dirname + '/public/index.html')
+	var URL1 = 'http://www.youtube.com/embed/8dqEJSTLOQM';
+	var URL2 = 'http://www.youtube.com/embed/T4JrQpzno5Y';
+	var URL3 = 'http://www.youtube.com/embed/EcKinnMXuKg';
+	res.render('index', {
+		url1 : URL1,
+		url2 : URL2, 
+		url3 : URL3,
+		thumb1 : 'afterlife.png',
+		thumb2 : 'rebellion.png',
+		thumb3 : 'suburbs.png',
+	});
 });
 
 app.get('/users', user.list);

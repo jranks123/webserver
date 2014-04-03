@@ -1,1 +1,11 @@
 ./mongod --dbpath ../../arcade/data
+
+
+               <iframe id="vid1" class='vid1' width="560" height="315" src="<http://www.youtube.com/embed/8dqEJSTLOQM?&amp;autohide=1&amp;enablejsapi=1&amp;html5=1"></iframe> 
+            </div> 
+            <div class="embeddedVideo" id="video2">
+               <iframe id="vid2" width="560" height="315" src="http://www.youtube.com/embed/T4JrQpzno5Y?&amp;autohide=1&amp;enablejsapi=1&amp;html5=1"></iframe> 
+            </div> 
+            <div class="embeddedVideo" id="video3">
+                 <iframe id="vid3" width="560" height="315" src="http://www.youtube.com/embed/EcKinnMXuKg?&amp;autohide=1&amp;enablejsapi=1&amp;html5=1"></iframe> 
+            </div> 
