@@ -10,8 +10,11 @@ var path = require('path');
 
 var mongoose = require('mongoose');
 
-
+var passport = require('passport');
+var LocalStrategy = require ('passport-local').Strategy;
 mongoose.connect('mongodb://localhost/arcadeDB');
+
+
 
 var app = express();
 
@@ -26,14 +29,52 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
 
 
+/*
+app.configure('development', function(){
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
 
+app.configure('production', function(){
+    app.use(express.errorHandler());
+});
+
+
+
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (user.password != password) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+
+*/
 var db = mongoose.connection;
 var dbIsOpen = false;
 var YoutubeVids;
@@ -122,6 +163,77 @@ db.once('open', function callback () {
 
 
 
+var userSchema = mongoose.Schema({
+    username: String,
+    password: String
+});
+userSchema.methods.validPassword = function (password) {
+  if (password === this.password) {
+    return true; 
+  } else {
+    return false;
+  }
+}
+
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.use(express.favicon());
+  app.use(express.logger('dev'));
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(express.cookieParser());
+  app.use(express.session({ cookie: { maxAge: 30000 }, secret: 'secret' }));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(app.router);
+  app.use(express.static(path.join(__dirname, 'public')));
+});
+
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+passport.use(new LocalStrategy(function(username, password, done) {
+    User.findOne({ username: username }, function(err, user) {
+      if (err) { 
+        return done(err); 
+      }
+      if (!user) {
+      	console.log("Incorrect Login Details");
+        return done(null, false, { message: 'Incorrect Login Details' });
+      }
+      if (password != user.password || !user) {
+      	console.log("Incorrect Login Details");
+        return done(null, false, { message: 'Incorrect Login Details' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+
+app.post('/login',
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/admin',
+  })
+);
+
+
+
+
+
+
+
+
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
@@ -140,6 +252,8 @@ var findCallback = function(err, data)
 		return data.url;
 	}
 }
+
+
 
 
 app.get('/', function (req, res){
@@ -190,7 +304,9 @@ app.get('/admin_reset', function (req, res){
 		});
 	});
 
-app.get('/users', user.list);
+
+
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
