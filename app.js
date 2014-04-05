@@ -24,7 +24,6 @@ app.engine('.html', require('ejs').__express);
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
-app.use(express(__dirname+'/public'));
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -324,7 +323,8 @@ app.get('/admin_panel', function (req, res){
 			});
 		});
 });
-
+app.get('/content/:filename', routes.partials);
+app.use(routes.index);
 
 
 http.createServer(app).listen(app.get('port'), function(){
