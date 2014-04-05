@@ -74,6 +74,16 @@
 		//$locationProvider.html5Mode(true);
 	});
 
+	/*adminApp.controller('FormCtrl', function ($scope, $http) {
+		$scope.data = {
+		        vid1: "default",
+		        vid2: "default",
+		        vid3 : "default"
+		    };*/
+
+
+
+
 	adminApp.controller('mainController', function($scope) {
 		$scope.message = 'Home splash';
 	});
@@ -83,5 +93,46 @@
 	});
 
 	adminApp.controller('musicController', function($scope) {
+		$scope.message = 'Music page baby';
+	});
+
+	adminApp.controller('reflektorController', function($scope) {
+		$scope.message = '';
+	});
+
+
+	adminApp.controller('thesuburbsController', function($scope) {
+		$scope.message = '';
+	});
+
+	adminApp.controller('neonbibleController', function($scope) {
+		$scope.message = 'Music page baby';
+	});	
+
+	adminApp.controller('funeralController', function($scope) {
+		$scope.message = 'Home splash';
+	});
+
+	adminApp.controller('afepController', function($scope) {
+		$scope.message = 'Bio page';
+	});
+
+	adminApp.controller('videoController', function($scope) {
+		$scope.message = 'Music page baby';
+	});
+
+	adminApp.controller('liveController', function($scope) {
+		$scope.message = 'Home splash';
+	});
+
+	adminApp.controller('blogController', function($scope) {
+		$scope.message = 'Bio page';
+	});
+
+	adminApp.controller('themesController', function($scope) {
+		$scope.message = 'Music page baby';
+	});
+
+		adminApp.controller('userController', function($scope) {
 		$scope.message = 'Music page baby';
 	});
