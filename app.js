@@ -304,9 +304,18 @@ app.get('/admin_reset', function (req, res){
 		});
 	});
 
+<<<<<<< HEAD
 
 
 
+=======
+app.get('/admin_panel', function (req, res){
+			res.render('admin_home', {
+		});
+	});
+
+app.get('/users', user.list);
+>>>>>>> 4c88531889f7d90c0810b0a39490321e1ec40055
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
