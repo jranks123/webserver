@@ -73,7 +73,7 @@ passport.deserializeUser(function(id, done) {
 */
 var db = mongoose.connection;
 var dbIsOpen = false;
-var YoutubeVids;
+var youtubevids;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
   	dbIsOpen = true;
@@ -229,7 +229,6 @@ app.post('/login',
 
 
 
-
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
@@ -322,6 +321,9 @@ app.get('/admin_panel', function (req, res){
 });
 
 
+
+
+
 app.get('/content/:name', function (req, res){
 
 
@@ -330,15 +332,82 @@ app.get('/content/:name', function (req, res){
 		return;
 	}
 
-	YoutubeVids.find({}, function(err, videolist){
-	var name = req.params.name;
-  	res.render('content/' + name, {
-  		adurl1 : videolist[0].url,
-  		adurl2 : videolist[1].url,
-  		adurl3 : videolist[2].url,
-  	});
-  });
+		var name = req.params.name;
+		if(name == 'video.html'){
+			YoutubeVids.find({}, function(err, videolist){
+			  	res.render('content/' + name, {
+			  		adurl1 : videolist[0].url,
+			  		adurl2 : videolist[1].url,
+			  		adurl3 : videolist[2].url,
+			  	});
+			});
+		}
+		else{
+			res.render('content/' + name, {});
+
+		}
+	
 });
+
+
+
+
+app.post('/saveVideo', function(req, res) {
+
+		var youtubeVidSchema = new mongoose.Schema({
+		  name : String,
+		  url: { type: String }
+		});
+
+
+		var youtube = mongoose.model('YT', youtubeVidSchema, 'youtubevids');
+
+		var db = mongoose.createConnection();
+        // Get our form values. These rely on the "name" attributes
+		var vid1 = new youtube({
+		  name: "vid1",
+		});
+		
+		var upsertData1 = vid1.toObject();
+		delete upsertData1._id;
+		youtube.update({name:vid1.name, url:vid1.url, _id: vid1.id}, upsertData1, {upsert: true}, function (err, doc) {
+            if (err) {
+                // If it failed, return error
+                res.send("There was a problem adding the information to the database.");
+            }else{
+            	res.render('content/video.html', {})
+            }
+        });
+
+
+
+    
+
+
+
+
+
+
+    	//IGNORE ALL BELOW
+
+        // Set our collection
+      /*  var collection = db.find('YoutubeVids');
+
+        // Submit to the DB
+        collection.update(
+        	{name: "vid1"},
+        	{
+        		name:"vid1",
+        		url:"hello"
+        	},
+        	{upsert: true}
+        );*/
+
+   // });
+
+
+
+
  
 
 http.createServer(app).listen(app.get('port'), function(){

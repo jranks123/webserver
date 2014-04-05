@@ -1,13 +1,14 @@
 	<div>
-		<h1>Video</h1>
-
-		<p>Control ArcadeFire.com's featured YouTube videos by adding URLs below:</p>
-		<br />
-		<p>Default main video URL: <input type="text" name="middle" value = "<%= adurl1%>"></p>
-		<br />
-		<p>Default left video URL: <input type="text" name="left" value = "<%= adurl2%>"></p>
-		<br />
-		<p>Default right video URL: <input type="text" name="right" value = "<%= adurl3%>"></p>
-		<br />
-		<p><input type="submit" value="Save"></p>
+	<h1>Video</h1>
+		<form name="video-form" class="video-form" action="/saveVideo" method="post">
+			<p>Control ArcadeFire.com's featured YouTube videos by adding URLs below:</p>
+			<br />
+			<p>Default main video URL: <input type="text" name="middle" value = "<%= adurl1%>"></p>
+			<br />
+			<p>Default left video URL: <input type="text" name="left" value = "<%= adurl2%>"></p>
+			<br />
+			<p>Default right video URL: <input type="text" name="right" value = "<%= adurl3%>"></p>
+			<br />
+			<p><input type="submit" value="Save"></p>
+		</form>
 	</div>
