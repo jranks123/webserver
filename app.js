@@ -24,6 +24,7 @@ app.engine('.html', require('ejs').__express);
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
+app.use(express(__dirname+'/public'));
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -33,7 +34,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
-
 
 /*
 app.configure('development', function(){
@@ -174,7 +174,7 @@ userSchema.methods.validPassword = function (password) {
     return false;
   }
 }
-
+var User = mongoose.model('User', userSchema);
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.use(express.favicon());
@@ -222,7 +222,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 
 app.post('/login',
   passport.authenticate('local', {
-    successRedirect: '/',
+    successRedirect: '/admin_panel',
     failureRedirect: '/admin',
   })
 );
@@ -304,18 +304,28 @@ app.get('/admin_reset', function (req, res){
 		});
 	});
 
-<<<<<<< HEAD
-
-
-
-=======
 app.get('/admin_panel', function (req, res){
 			res.render('admin_home', {
 		});
 	});
 
-app.get('/users', user.list);
->>>>>>> 4c88531889f7d90c0810b0a39490321e1ec40055
+app.get('/admin_panel', function (req, res){
+
+	if(!dbIsOpen){		
+		console.log("db not open" );
+		return;
+	}
+
+		YoutubeVids.find({}, function(err, videolist){
+			res.render('admin_home', {
+				adurl1 : videolist[0].url,
+				adurl2 : videolist[1].url, 
+				adurl3 : videolist[2].url,
+			});
+		});
+});
+
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
