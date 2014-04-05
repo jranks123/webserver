@@ -7,22 +7,18 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-
 var mongoose = require('mongoose');
-
 var passport = require('passport');
 var LocalStrategy = require ('passport-local').Strategy;
 mongoose.connect('mongodb://localhost/arcadeDB');
 
-
-
 var app = express();
 
-app.engine('.html', require('ejs').__express);
+app.engine('.html', require('ejs').renderFile);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'html');
 app.use(express.favicon());
 app.use(express.logger('dev'));
@@ -33,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
+//app.use(app.router);
 
 /*
 app.configure('development', function(){
@@ -182,10 +179,10 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(express.cookieParser());
   app.use(express.session({ cookie: { maxAge: 30000 }, secret: 'secret' }));
+  app.use(express.static(path.join(__dirname, 'public')));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
 });
 
 app.configure('development', function(){
@@ -323,9 +320,26 @@ app.get('/admin_panel', function (req, res){
 			});
 		});
 });
-app.get('/content/:filename', routes.partials);
-app.use(routes.index);
 
+
+app.get('/content/:name', function (req, res){
+
+
+	if(!dbIsOpen){		
+		console.log("db not open" );
+		return;
+	}
+
+	YoutubeVids.find({}, function(err, videolist){
+	var name = req.params.name;
+  	res.render('content/' + name, {
+  		adurl1 : videolist[0].url,
+  		adurl2 : videolist[1].url,
+  		adurl3 : videolist[2].url,
+  	});
+  });
+});
+ 
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
