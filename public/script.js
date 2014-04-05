@@ -1,13 +1,11 @@
 // script.js
 
-	// create the module and name it adminApp
-        // also include ngRoute for all our routing needs
+	//create app and add ngroute
 	var adminApp = angular.module('adminApp', ['ngRoute']);
 
 	// configure our routes
-	adminApp.config(function($routeProvider) {
+	adminApp.config(function($routeProvider, $locationProvider) {
 		$routeProvider
-
 			.when('/', {
 				templateUrl : 'content/home.html',
 				controller  : 'mainController'
@@ -72,6 +70,8 @@
 				templateUrl : 'content/user.html',
 				controller  : 'userController'
 			});
+
+		//$locationProvider.html5Mode(true);
 	});
 
 	adminApp.controller('mainController', function($scope) {
