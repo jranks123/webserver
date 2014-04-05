@@ -190,6 +190,11 @@ app.get('/admin_reset', function (req, res){
 		});
 	});
 
+app.get('/admin_panel', function (req, res){
+			res.render('admin_home', {
+		});
+	});
+
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
