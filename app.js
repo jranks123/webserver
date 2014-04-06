@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
-//app.use(app.router);
+
 
 /*
 app.configure('development', function(){
@@ -75,23 +75,34 @@ passport.deserializeUser(function(id, done) {
 var db = mongoose.connection;
 var dbIsOpen = false;
 var YoutubeVids;
+var tourdates;
+var tourdatesschema;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
   	dbIsOpen = true;
+
 	var youtubeVidSchema = new mongoose.Schema({
 	  name : String,
 	  url: { type: String }
 	});
 
-
 	var users = new mongoose.Schema({
 	  username : String,
 	  password : String
 	});
+
+	tourdatesschema = new mongoose.Schema({
+		location : String,
+		venue 	 : String,
+		date 	 : String,
+		tickets  : String
+	});
+
 	// Compile a 'Movie' model using the movieSchema as the structure.
 	// Mongoose also creates a MongoDB collection called 'Movies' for these documents.
 	YoutubeVids = mongoose.model('YoutubeVids', youtubeVidSchema);
 	users = mongoose.model('users', users);
+	tourdates = mongoose.model('tourdates', tourdatesschema);
 	//lower case?
 
 /*	var usernameAdmin = new users({
@@ -307,18 +318,7 @@ app.get('/admin_panel', function (req, res){
 	});
 
 app.get('/admin_panel', function (req, res){
-
-	if(!dbIsOpen){		
-		console.log("db not open" );
-		return;
-	}
-
-		YoutubeVids.find({}, function(err, videolist){
 			res.render('admin_home', {
-				adurl1 : videolist[0].url,
-				adurl2 : videolist[1].url, 
-				adurl3 : videolist[2].url,
-			});
 		});
 });
 
@@ -329,14 +329,34 @@ app.get('/content/:name', function (req, res){
 		return;
 	}
 
-	YoutubeVids.find({}, function(err, videolist){
 	var name = req.params.name;
-  	res.render('content/' + name, {
-  		adurl1 : videolist[0].url,
-  		adurl2 : videolist[1].url,
-  		adurl3 : videolist[2].url,
-  	});
-  });
+
+	if(name == "video.html"){
+		YoutubeVids.find({}, function(err, videolist){
+	  	res.render('content/' + name, {
+	  		adurl1 : videolist[0].url,
+	  		adurl2 : videolist[1].url,
+	  		adurl3 : videolist[2].url,
+	  	});
+	  });
+	}
+	else if(name == "live.html"){
+		tourdates.find({}, function(err, tourdateslist){
+			res.render('content/'+name,{
+				date1 : tourdateslist[0].date,
+				venue1 : tourdateslist[0].venue,
+				loc1 : tourdateslist[0].location,
+				date2 : tourdateslist[1].date,
+				venue2 : tourdateslist[1].venue,
+				loc2 : tourdateslist[1].location,
+			});
+		});
+	}
+	else{
+		res.render('content/'+name,{	
+		});
+	}
+
 });
  
 
