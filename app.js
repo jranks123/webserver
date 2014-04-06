@@ -340,7 +340,7 @@ app.get('/content/:name', function (req, res){
 	var name = req.params.name;
 
 	if(name == "video.html"){
-		YoutubeVids.find({}, function(err, videolist){
+		youtubevids.find({}, function(err, videolist){
 	  	res.render('content/' + name, {
 	  		adurl1 : videolist[0].url,
 	  		adurl2 : videolist[1].url,
