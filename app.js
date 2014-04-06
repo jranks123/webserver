@@ -14,7 +14,9 @@ var iterations = 12000;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require ('passport-local').Strategy;
+var expressValidator = require('express-validator');
 mongoose.connect('mongodb://localhost/arcadeDB');
+
 
 var app = express();
 
@@ -152,6 +154,7 @@ app.configure(function(){
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
+  app.use(expressValidator());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
   app.use(express.session({ cookie: { maxAge: 30000 }, secret: 'secret' }));
@@ -430,19 +433,46 @@ app.get('/content/:name', ensureAuthenticated, function (req, res){
 
 
 app.post('/addNewDate', function(req, res) {
-	tourDate = new Date(req.body.year,req.body.month-1, req.body.day  );
-	 new tourdates({
-	 	location : req.body.location,
-		venue 	 : req.body.venue,
-		showDate 	 : req.body.day + "/" + req.body.month,
-		tickets  : req.body.tickets,
-		date: tourDate
+	req.assert('location', 'Please enter a location').notEmpty();
+	req.assert('venue', 'Please enter the venue').notEmpty();
+	req.assert('tickets', 'Please include valid ticket link').notEmpty();
+	var errors = req.validationErrors();
 
 
-	  }).save( function( err, tour, count ){
-	    res.redirect( 'admin_panel#/live' );
-	  });
+	function urlChecker(url){
+		var regexp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+		if (regexp.test(url)){
+			return 1;	
+		}
+		else {
+			return 0;
+		}
+	};
+
+	var urlhandler = req.body.tickets;
+	var validURL = urlChecker(urlhandler);
+
+
+	if ((!errors) && (validURL==1)){
+		tourDate = new Date(req.body.year,req.body.month-1, req.body.day  );
+		 new tourdates({
+		 	location : req.body.location,
+			venue 	 : req.body.venue,
+			showDate : req.body.day + "/" + req.body.month,
+			tickets  : req.body.tickets,
+			date: tourDate
+
+
+		  }).save( function( err, tour, count ){
+		    res.redirect( 'admin_panel#/live' );
+		  });
+		}
+		else {
+			res.redirect( 'admin_panel#/failDate');
+		}
 });
+
+
 
 app.get( '/deleteDate/:id', function ( req, res ){
   	tourdates.findById( req.params.id, function ( err, dates ){
@@ -451,7 +481,6 @@ app.get( '/deleteDate/:id', function ( req, res ){
     });
   });
 });
-
 
 
 
