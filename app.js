@@ -26,6 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
@@ -377,8 +378,6 @@ app.get('/content/:name', function (req, res){
 
 app.post('/saveVideo', function(req, res) {
 
-
-
 	  youtubevids.findOneAndUpdate({name:"vid1"}, { $set: { url: req.body.left}}, {upsert:true},  function(err, person) {
 	  if (err) {
 	    console.log('got an error');
@@ -403,17 +402,6 @@ app.post('/saveVideo', function(req, res) {
      });
 	});
 
-
-
-
-
-    
-
-
-
-
-
-
     	//IGNORE ALL BELOW
 
         // Set our collection
@@ -430,11 +418,6 @@ app.post('/saveVideo', function(req, res) {
         );*/
 
    // });
-
-
-
-
- 
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

@@ -1,0 +1,149 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:100,200,300,400,600,700,800,900);
+
+
+<<<<<<< HEAD
+@media screen and (max-width: 640px){
+  .Hide{
+    display: none;
+  }  
+
+}
+
+
+=======
+
+html {
+  <!-- background: #111; -->
+}
+
+>>>>>>> 76e1fb1fb9c7ea94ba64c30ebc661e05763577e7
+body{
+  background:url(img/bg_chalk.jpg) no-repeat;
+  background-attachment: fixed;
+  background-position-x: center !important;
+}
+
+  body.lightboxed {
+    height: 100%;
+    overflow: hidden;
+  }
+.nav {
+  top:0px;
+  left:0px;
+  height: 50px;
+  width:100%;
+  position:fixed;
+  /*background-color: #222222;*/
+  background: rgba(34,34,34,.8);
+  z-index:2;
+  display:block;
+  font-family:Courier;
+
+}
+
+
+.nav .logo{
+  position: absolute;
+  left: 20px;
+  width: auto;
+  cursor: pointer;
+  opacity: .8;
+}
+
+.nav .logo img{
+  height:40%;
+  width:40%;
+}
+
+.nav .logo:hover{
+  opacity:1;
+}
+
+
+.nav ul .inPage{
+  float:left;
+}
+
+
+
+.nav ul .icon{
+  float:right;
+}
+
+.nav ul li {
+
+  font-size: large;
+}
+
+
+/* ===== HOME ABOUT ===== */
+.nav ul li a {
+  text-decoration:none; 
+ color:#cdcdcd;
+}
+
+.nav ul li.inPage a {
+ padding: 16px 25px 16px 25px;
+}
+
+
+
+.nav ul li a:link {text-decoration:none;}
+.nav ul li a:visited {text-decoration:none;}
+.nav ul li a:hover {text-decoration:none; color:white;}
+.nav ul li a:active {text-decoration:none; }
+
+  .nav li {
+    margin: -16px 0px 0px 0px;
+    padding: 12px 0px 14px 0px;
+    float: left;
+    list-style: none;
+    font-weight: 100;
+    font-size: 14px;
+    line-height: 24px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+    .nav a {
+      color: #000;
+    }
+    li.icon a {
+      background: url(img/radkeySocialIcons.png) 0 -0px no-repeat;
+    }
+      li.icon a.twitter {
+        background: url(img/radkeySocialIcons.png) -16px -0px no-repeat;
+      }
+      li.icon a.instagram {
+        background: url(img/radkeySocialIcons.png) -32px -0px no-repeat;
+      }
+      li.icon a.facebook {
+        background: url(img/radkeySocialIcons.png) -0 -0px no-repeat;
+      }
+      li.icon a.youtube {
+        background: url(img/radkeySocialIcons.png) -64px -0px no-repeat;
+      }
+      li.icon a.soundcloud {
+        background: url(img/radkeySocialIcons.png) -80px -0px no-repeat;
+      }
+
+          .nav li.icon {
+      padding: 16px 7px 18px 7px;
+      line-height: 16px;
+    }
+
+         li.icon a {
+        display: block;
+        width: 16px;
+        background: url(../img/radkeySocialIcons.png) 0 0 no-repeat;
+        font-size: 0;
+      }
+
+         .nav li:hover {
+        background: rgba(48,48,48,.9);
+     /* background: rgba(174,0,0,.9);*/
+    }
+
+    #homeAbout{
+      margin-left: 5%;
+    }
