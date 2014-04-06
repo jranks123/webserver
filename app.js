@@ -86,6 +86,8 @@ var tourdates;
 var tourdatesschema;
 var userSchema;
 var users;
+var biosSchema;
+var bios;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
   	dbIsOpen = true;
@@ -109,12 +111,19 @@ db.once('open', function callback () {
 		showDate : String
 	});
 
+	biosSchema = new mongoose.Schema({
+		name : String,
+		bio : String
+	});
+
 
 	// Compile a 'Movie' model using the movieSchema as the structure.
 	// Mongoose also creates a MongoDB collection called 'Movies' for these documents.
 	youtubevids = mongoose.model('youtubevids', youtubeVidSchema);
 	users = mongoose.model('users', userSchema);
 	tourdates = mongoose.model('tourdates', tourdatesschema);
+	bios= mongoose.model('bios', biosSchema);
+
 	//lower case?
 
 
@@ -157,7 +166,7 @@ app.configure(function(){
   app.use(expressValidator());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
-  app.use(express.session({ cookie: { maxAge: 30000 }, secret: 'secret' }));
+  app.use(express.session({ cookie: { maxAge: 500000 }, secret: 'secret' }));
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(passport.initialize());
   app.use(passport.session());
@@ -262,8 +271,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
       }
 
 
-  //  var testHash = generateHash('password');
-   // console.log('test hash = ' + testHash);
+
 
 	if (verifyHash(password, user.hash)) 
     {
@@ -345,20 +353,26 @@ app.get('/', function (req, res){
 	  }
 	}
 
-	youtubevids.find({}, function(err, videolist){
-		tourdates.
-    		find().
-    			sort( {date: 1} ).
-    			    	exec( function ( err, tour){
-					res.render('index', {
-						url1 : videolist[0].url,
-						url2 : videolist[1].url, 
-						url3 : videolist[2].url,
-						thumb1 : getScreen(videolist[0].url),
-						thumb2 : getScreen(videolist[1].url),
-						thumb3 : getScreen(videolist[2].url),
-						tour : tour,
-					});
+	bios.find({}, function(bierr, bio){
+		youtubevids.find({}, function(err, videolist){
+			tourdates.
+	    		find().
+	    			sort( {date: 1} ).
+	    			    	exec( function ( err, tour){
+	    			   	if(bierr){
+	    			   		return;
+	    			   	}
+						res.render('index', {
+							bio : bio,
+							url1 : videolist[0].url,
+							url2 : videolist[1].url, 
+							url3 : videolist[2].url,
+							thumb1 : getScreen(videolist[0].url),
+							thumb2 : getScreen(videolist[1].url),
+							thumb3 : getScreen(videolist[2].url),
+							tour : tour,
+						});
+			});
 		});
 	});
 });
@@ -410,6 +424,13 @@ app.get('/content/:name', ensureAuthenticated, function (req, res){
 	  		adurl3 : videolist[2].url,
 	  	});
 	  });
+	}	
+	else if(name == "about.html"){
+		bios.find({}, function(err, bio){
+	  	res.render('content/' + name, {
+	  		bio : bio,
+	  	});
+	  });
 	}
 	else if(name == "live.html"){
 		tourdates.
@@ -430,6 +451,29 @@ app.get('/content/:name', ensureAuthenticated, function (req, res){
 });
 
 
+app.post('/UpdateBio', function(req, res){
+	  var unvalidParagraphs = req.body.bio.replace(/\t|\r|/g, '').split('\n');
+	  var paragraphs = [];
+	  	 var i;
+	  for(i = 0; i < unvalidParagraphs.length; i++){
+	  	if (unvalidParagraphs[i].replace(/(\r\n|\n|\r)/gm,'').replace(/ /g,'') != ''){
+	  		paragraphs.push(unvalidParagraphs[i]);
+	  	}
+	  }
+
+
+	  bios.remove({}, function () { }); 
+	  for(i = 0; i < paragraphs.length; i ++){
+	  	 new bios({
+	  	 	bio : paragraphs[i],
+	  	 	name : "p"
+	  	 }).save(function( err, tour, count ){
+		    
+		  });
+
+		}
+		res.redirect( 'admin_panel#/about' );
+	});
 
 
 app.post('/addNewDate', function(req, res) {
