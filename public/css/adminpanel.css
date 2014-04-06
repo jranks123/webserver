@@ -116,6 +116,7 @@ p h1 {
 }
 
 .show .date {
+  display: block;
   float:left;
   width: 130px;
   padding: 50px 0 0;
@@ -123,6 +124,7 @@ p h1 {
   font-size: 16px;
 }
 .show .venue {
+  display: block;
   float:left;
   text-align: left;
   font-weight: 400;
@@ -146,7 +148,7 @@ p h1 {
   text-decoration: none;
   color: #ff0000;
   display: block;
-  padding: 50px 0;
+  padding: 37px 0;
   font-weight: 600;
   font-size: 16px;
 }
@@ -168,10 +170,12 @@ input[type="text"]
   line-height: 22px;
   margin: 4px 4px;
 }
+
 input[type="button"]
 {
 width:120px;
 }
+
 select {
     background: #FFF;
     height: 30px;
