@@ -3,7 +3,7 @@
 
 		<p>Add new live date:</p>
 		<br />
-		<form action="/addLiveDate" method="post">
+		<form action="/addNewDate" method="post">
 		Date: <select name="day" id="day">
   				<option value="01">1</option>
   				<option value="02">2</option>
@@ -70,19 +70,24 @@
 		<br /><p><input type="submit" value="Add"></p>
 	</form>
 		<br />
-		<p>Current live dates:</p>
+		<div class = "dates">
+			<% tour.forEach( function( dates ){ 
 
-		<div class="dates">
+		%>
 		<p><div class="show"> 
-            <div class="date"><%= date1%></div> 
-            <div class="venue">  <div class="city"><%= loc1%></div>  <%= venue1%><br /> </div> 
+            <div class="date"><%= dates.date%></div> 
+            <div class="venue">  <div class="city"><%= dates.location%></div>  <%= dates.venue%><br /> </div> 
             <a class="tickets" href="javascript:void(0)" target="_blank">Delete</a> 
         </div></p>
-        <p><div class="show"> 
-            <div class="date"><%= date2%></div> 
-            <div class="venue">  <div class="city"><%= loc2%></div>  <%= venue2%><br /> </div> 
-            <a class="tickets" href="javascript:void(0)" target="_blank">Delete</a> 
-        </div></p>
-    	</div>
-      
-	</div>
+		<% 
+
+
+	}); %>
+
+</div>
+
+
+
+
+
+

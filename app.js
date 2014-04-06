@@ -77,6 +77,7 @@ var youtubevids;
 var youtubeVidSchema ;
 var tourdates;
 var tourdatesschema;
+
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
   	dbIsOpen = true;
@@ -349,14 +350,12 @@ app.get('/content/:name', function (req, res){
 	  });
 	}
 	else if(name == "live.html"){
-		tourdates.find({}, function(err, tourdateslist){
+		tourdates.find({}, function(err, tour, count){
 			res.render('content/'+name,{
-				date1 : tourdateslist[0].date,
-				venue1 : tourdateslist[0].venue,
-				loc1 : tourdateslist[0].location,
-				date2 : tourdateslist[1].date,
-				venue2 : tourdateslist[1].venue,
-				loc2 : tourdateslist[1].location,
+				date : 'eg',
+				venue : 'eg',
+				tickets : 'eg',
+				tour : tour
 			});
 		});
 	}
@@ -371,7 +370,17 @@ app.get('/content/:name', function (req, res){
 
 
 
+app.post('/addNewDate', function(req, res) {
+	 new tourdates({
+	 	location : req.body.location,
+		venue 	 : req.body.venue,
+		date 	 : req.body.day + "/" + req.body.month,
+		tickets  : req.body.tickets
 
+	  }).save( function( err, tour, count ){
+	    res.redirect( 'admin_panel#/live' );
+	  });
+});
 
 
 
