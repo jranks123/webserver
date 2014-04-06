@@ -30,33 +30,6 @@ var app = express();
 var port = 3000;
 
 
-app.configure(function(){
-  app.use(flash());
-  app.set('views', __dirname + '/views');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(helmet.xframe());
-  app.use(helmet.iexss());
-  app.use(helmet.contentTypeOptions());
-  app.use(helmet.cacheControl());
-  app.use(expressValidator());
-  app.use(express.methodOverride());
-  app.use(express.cookieParser('secret'));
-  app.use(express.session({ cookie: {httpOnly:true, secure:true,  maxAge: 5*60*1000 } }));
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.use(passport.initialize());
-  app.use(passport.session());
-  app.use(requireHTTPS);
-  /*app.use(express.csrf());
-  app.use(function (req, res, next) {
-  	res.locals.csrftoken = req.session._csrf;
-    next();
-  });*/
-   app.use(app.router);
-
-});
-
 
 /*https.createServer(options, function (req, res) {
   res.writeHead(200);
@@ -83,7 +56,6 @@ app.use('/public', express.static(__dirname + '/public'));
 var server = https.createServer(options, app).listen(port, function(){
   console.log("Express server listening on port " + port);
 });
-
 
 
 function requireHTTPS(req, res, next) {
@@ -147,7 +119,32 @@ db.once('open', function callback () {
 
 
 
+app.configure(function(){
+  app.use(flash());
+  app.set('views', __dirname + '/views');
+  app.use(express.favicon());
+  app.use(express.logger('dev'));
+  app.use(express.bodyParser());
+  app.use(helmet.xframe());
+  app.use(helmet.iexss());
+  app.use(helmet.contentTypeOptions());
+  app.use(helmet.cacheControl());
+  app.use(expressValidator());
+  app.use(express.methodOverride());
+  app.use(express.cookieParser('secret'));
+  app.use(express.session({ cookie: {httpOnly:true, secure:true,  maxAge: 5*60*1000 } }));
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(requireHTTPS);
+  /*app.use(express.csrf());
+  app.use(function (req, res, next) {
+  	res.locals.csrftoken = req.session._csrf;
+    next();
+  });*/
+   app.use(app.router);
 
+});
 
 app.configure('development', function(){
   app.use(express.errorHandler());
@@ -594,3 +591,11 @@ app.post('/saveVideo', function(req, res) {
     
 
 
+
+
+ /*
+
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});
+*/
