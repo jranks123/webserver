@@ -248,6 +248,7 @@
                     The admin panel allows the user to: 
                     <ul>
                         <li>- Edit band biography</li>
+                        <li>- Update all 5 albums' information and buy links</li>
                         <li>- Change the website's featured videos</li>
                         <li>- Add new live dates</li>
                         <li>- Remove erroneous live dates</li>
@@ -268,9 +269,6 @@
                  <p>
                     To improve security, every time a new password was created (either changed by user, or in the instance of a new admin account being created) a new salt was used, 8 characters long and created randomly.
                 </p>
-                <p>
-                </p>
-
             </div>
 
             <div class="text" id="validate">
@@ -293,19 +291,24 @@
                 <p>
                     YouTube ID validation to verify the ID entered is between 10 and 12 characters and is strictly alphanumeric.
                 </p>
+                <p>
+                    Validation that both passwords match, and are longer than 8 characters when creating a new password.
+                </p>
             </div>
 
             <div class="text" id="contentparse">
                 <h1>Parsing New Content & Data</h1>
                 <p>
-                    From within the admin panel the band can now update the various sections of their website without interacting with the html/ejs. For this reason it is important to do various checks to ensure the data they are entering in the website is valid and won't break the website. 
-                </p>
-
-                <p>
-                    We implemented both client side validation and server side validation. Implementing client side validation allowed us to easily alert the user to any mistakes they may have made when entering data without sending the data to the server. This is useful for regular site users and honest mistakes. However, it is easy to bypass client side form validation so it was also necessary for us to implement server side validation to prevent incorrect data ending up in the database on the chance the client side was bypassed, either accidentally or maliciously. 
+                    Having received new information from the administrator, it is sometimes necessary to prepare this data for view or store the data in a special way as it is not always in the format required for display. Examples of this include the 'Edit Biography' option of the admin panel, and the YouTube ID input.
                 </p>
                 <p>
-                    To parse the Bio content we had to think about our approach carefully. Initially we juust read the whole box as a string and displayed that on the main html page but this didn't work as the text entered in the textbox on the edit bio section did not come out in paragraphs on the main html page at first. To fix this we split the string on line breaks and saved each paragraph as a seperate entry in the database, then injected each paragraph into the bio section in with its own paragraph tags. We also removed any paragraphs from the database that were just line breaks or spaces as this was causing an issue. 
+                    <b>YouTube ID</b>
+                </p>
+                <p>
+                    The admin has the option of providing new YouTube IDs to embed any YouTube video into the website as featured videos. While this is intended to be Arcade Fire's music videos, this functionality will work for any video on YouTube given the video is public or unlisted, and embeddable on external sites. 
+                </p>
+                <p>
+                    This works via injecting only the ID into an already correctly parsed template with EJS. A more interesting use for these IDs was to automatically grab a thumbnail for the video from YouTube for use in our video carousel. <b>These thumbnails were automatically served from YouTube as .jpg and we were unable to receive them as .png</b> but we left them in regardless to maintain streamlined functionality. 
                 </p>
             </div>
 
@@ -318,15 +321,10 @@
             </p>
                  <p>YouTube embed support was affected by using https, forcing us to discover and consult the <a href="http://apiblog.youtube.com/2011/02/https-support-for-youtube-embeds.html">YouTube API Blog</a> to fix this error (our links were hardcoded as http://... instead of https://...)</p>
             </div>
-                <div class="text" id="cookies">
-                    <h1>Cookies</h1>
-                       <p>Our site uses cookies 
-
-            </div>            
 
             <div class="text" id="csrf">
                 <h1>X-Site Request Forgery</h1>
-                 <p>Connect CSRF allows protection against cross-site request-forgery attacks using middleware tokens placed in a hidden form element and stored in the session. This is works by access to the form being forbidden if the hidden token is not located as present, or more simply if the session token does not match the body token. In the end, unfortunately, we couldn't get this to work in the final site.</p>
+                 <p>Connect CSRF allows protection against cross-site request-forgery attacks using middleware tokens placed in a hidden form element and stored in the session. This is works by access to the form being forbidden if the hidden token is not located as present, or more simply if the session token does not match the body token.</p>
             </div>
                
 

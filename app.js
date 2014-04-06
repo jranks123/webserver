@@ -61,9 +61,11 @@ app.use('/public', express.static(__dirname + '/public'));
 
 function requireHTTPS(req, res, next) {
     if (!req.secure) {
+
         //FYI this should work for local development as well
         var redirectURL = 'https://' + req.get('host') + req.url;
-        return res.redirect(redirectURL.replace("8000", "3000"));
+        return res.redirect(redirectURL.replace("8000", port));
+
     }
     next();
 }
