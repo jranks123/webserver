@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Web Tech: Combined Client & Server Report</title>
+        <link rel="stylesheet" href="report.css"/>
+    </head>
+
+    <body>
+        <div class="main">
+            <div class="imp" id="top">
+                <h1 class="head">Web Tech: Combined Client & Server Report</h1> 
+                <p><em>ArcadeFire.com by Jordan Fish and Jonathan Rankin</em></p>
+            </div>
+            <div class="text" class="indexA">
+                <h1>Index</h1>
+                <p>Use the index hyperlinks below to jump to a specific section.
+                    <h2><a href="#project" alt="Project Section">Project</a></h2>
+                    <ul>
+                        <li>--- <a href="#intro" alt="Intro Section">Introduction</a></li>
+                        <li>--- <a href="#client" alt="Client Section">Client</a></li>
+                        <li>--- <a href="#summary" alt="Summary Section">Summary of Skills & Implemented Technologies</a></li>
+                    </ul>
+                </p>
+                <p>
+                    <h2><a href="#clientside" alt="Client Side Section">Client Side</a></h2>
+                    <ul>
+                        <li>--- Basics</li>
+                        <li>--- Navigation</li>
+                        <li>--- <a href="#adminpanel" alt="Admin Section">Admin Panel & AngularJS</a></li>
+                    </ul>
+                </p>
+                <p>
+                    <h2><a href="#serverside" alt="Server Side Section">Server Side</a></h2>
+                    <ul>
+                        <li>--- <a href="#nodejs" alt="NodeJS Section">NodeJS</a></li>
+                        <li>--- <a href="#mongodb" alt="MongoDB Section">MongoDB</a></li>
+                        <li>--- <a href="#cms" alt="CMS Section">Content Management Overview</a></li>
+                        <li>--- <a href="#login" alt="Login Section">Authenticated Access</a></li>
+                        <li>--- <a href="#validate" alt="Data Validation Section">Data Validation (Both Client & Server Side)</a></li>
+                        <li>--- <a href="#contentparse" alt="Using Section">Parsing New Data</a></li>
+                        <li>--- <a href="#https" alt="Secure Section">https://</a></li>
+                        <li>--- <a href="#csrf" alt="CSRF Section">X-Site Request Forgery</a></li>
+
+                    </ul>
+                </p>
+            </div>
+
+            <div class="imp" id="project">
+                <h1 class="head">Project</h1>
+            </div>
+
+            <div class="text" id="intro">
+                <h1>Introduction</h1>
+                <p>For our Web Tech coursework we have acquired and completed a real world client request. We have undertaken the responsibility of creating a website and content management system for the band Arcade Fire. The website should be aesthetically stunning, in tune with the band's latest album campaign, and very easy to navigate still positioning itself as a website suitable for 2014. The band's fanbase is split between the tech-savvy and the tech-illiterate, so we aim to cater for this at all times.</p>
+                <p>During this coursework we will be communicating with the band and the band's management for their approval on stylistic choices and all final assets included are approved for use by the band, or the respective owners of the media.</p>          
+            </div>
+
+            <div class="text" id="client">
+                <h1>Client</h1>
+                <p>Arcade Fire is a Grammy winning indie rock band with four platinum albums. The band's heavy usage of beautiful and stunning imagery requires the design of the website to be bordering on artistic, while making sure the navigation is still simple and unconfusing. The band has provided a variety of exclusive content for us to utilize in the design of the website, including 150 unseen images in the form of a digital booklet which we have manipulated and edited to create the core aesthetics of our finished site.</p>
+                <p>The band have also requested that the site be updateable by them (biography, tour dates, etc) and have longevity enough to exist for the remainder of their current album campaign, Reflektor, which could last until 2017.</p>           
+            </div>
+
+            <div class="text" id="summary">
+                <h1>Summary of Skills & Implemented Technologies</h1>
+                <p>During this coursework we have used a wide range of skills and various technologies to create our final product. Below our report details how we used many of these, however for sake of easy digestion we have included a list of all the technologies we have used, learned and implemented for this coursework:</p>
+                <ul>
+                        <li>- HTML</li>
+                        <li>- CSS</li>
+                        <li>- Javascript</li>
+                        <li>- jQuery</li>
+                        <li>- AngularJS</li>
+                        <li>- Adobe Photoshop</li>
+                        <li>- GIMP</li>
+                        <li>- Inkscape</li>
+                        <li>- Animation</li>
+                        <li>- Responsibe Design</li>
+                        <li>- Cross Browser Compatibility (Fallback CSS, etc)</li>
+                        <li>- NodeJS</li>
+                        <li>- ExpressJS</li>
+                        <li>- ExpressV</li>
+                        <li>- EJS Templating</li>
+                        <li>- json</li>
+                        <li>- MongoDB</li>
+                        <li>- Mongoose</li>
+                        <li>- PassportJS</li>
+                        <li>- HelmetJS</li>
+                    </ul>           
+            </div>
+
+            <div class="imp" id="clientside">
+                <h1 class="head">Client Side</h1>
+            </div>
+
+            <div class="text" id="basics">
+                <h1>Basics</h1>
+                <p>We have attempted to create a fluid one-page scrolling website that is engaging and easy to navigate for a fan of Arcade Fire. By combining HTML with CSS and JavaScript we were able to create a dynamic, responsive design that immerses the user while remaining easy to navigate at all times.</p> 
+
+                <p>Since Arcade Fire are an extremely large, image-orientated indie rock band it was important for our website to be aesthetically stunning and in matching with the band's visual branding without overloading a user with images and spoiling the user-experience.</p>
+
+                <p>In addition to creating the standalone website for the assignment, Arcade Fire requested we also skin a blog/news style website to act as both a temporary website during the development process of the main site and later retire to act as the blog section of the website. By rebranding and skinning a WordPress install for the blog section we allowed the band members to remain on a platform they are comfortable using, while still providing a website that is visually appealing to users, and in theme with the main website.</p>
+
+                <p>This blog is already live on the client's website <a href="http://arcadefire.com" alt="Arcade Fire Website">viewable here</a>. We will discuss the work and process for this in a later section of this report.</p>
+
+                <p>As a brief summary, during this project we have used: XHTML, CSS, JavaScript, jQuery, PHP (minor for WordPress implementation), Photoshop, Gimp, Inkscape and attempted animation with SVGs, JavaScript and CSS. We have attempted to use as few CSS libraries as possible to focus on implementing things such as responsive design by hand. </p>
+
+                <p><strong>We had 2 CSS errors in main.css, however they are vital to the CSS animation of our page load element and for this reason we have left them in our CSS as requested by our client. This animation seems to work across all major browsers and seemed like CSS animation was a better option than using a .gif. We are unsure if this will reduce our mark so have made a note here that we are aware of it and have opted to keep it in.</strong></p>           
+            </div>
+
+            <div class="text" id="nav">
+                <h1>Navigation</h1>
+                <p>One of the first key elements of our website was the navigation bar. We wanted to create a navigation interface that existed below the page's initial introduction header, but became 'sticky' to the page top before it is able to exit the screen. </p>
+                <p>After laying out the navigation bar in HTML and CSS, we used JavaScript and an additional CSS class to achieve this effect. We added a 'div' element to mark the point where the navigation bar should acquire or release it's 'sticky' property and used the distance to scroll to this div as the deciding factor as to whether or not the navigation bar should be pinned. </p>
+                <p>To pin the navigation we simply added a class named 'navbar-fixed' to the navbar which changed it's position to fixed at the top of the window, and the z-index to a high number allowing it to exist in front of all other elements of the website, freeing the navigation for use at all times.</p> 
+            </div>
+
+            <div class="text" id="navresponse">
+                <h1>Navigation's Responsive Design</h1>
+                <p>From the beginning of the assignment we attempted to keep our site's design responsive. This began with the navigation bar. When the screen size reached that of a tablet or mobile phone, we changed the style of our navigation bar to become more symmetrical and adopt the aesthetic of a phone app. See below:</p>
+                <div class="textimg"><img src="screenshot1.png" alt="Nav Responsive Screenshot" /></div>
+                <p>This symmetrical style makes better use of webpage real-estate and is intended to be more intuitive to a mobile user. In modifying the CSS of the navigation bar, particularly the bar's height, we also had to modify the scroll-points for the page as a larger nav bar with a high z-index would cover up content.</p>
+
+                <p>Additional cosmetics and minutia were taken into consideration with the navigation bar. Namely, when the navigation bar is resting over the site header it's opactiy is decreased for aesthetic purposes. However, when it is over the website's content the opacity increases as to make sure the layout is unconfusing to a user. Furthermore, opacity increases again in the mobile layouts to act as an app navigation bar and as less of a style element. Finally, since old versions of Internet Explorer struggle with rgba values we included a regular rgb fall-back css value for the navigation bar.</p>
+            </div>
+
+            <div class="text" id="moreresponse">
+                <h1>Further Responsive Design</h1>
+                <p>We attempted to make all elements of the site's design responsive to browser changes, including the album artwork resizing, columns realigning and sections re-designed for different sizes. We used % where possible for major elements, pixels for specific minor positioning and em when elements were related to fonts.</p>
+            </div>
+
+            <div class="text" id="gogimp">
+                <h1>Animated Header Logo (.svg)</h1>
+                <p>We created a large svg version of Arcade Fire's logo as decoration to exist above the main header image using Inkscape. Using the opacity channel we were able to create the illusion of a steady fade upon scroll down, and used real SVG animation upon page load (this works in Chrome, but unsupported in Firefox).</p>
+            </div>
+
+            <div class="text" id="goink">
+                <h1>Parallax Elements</h1>
+                <p>Another style choice we made during the website creation was the use of parallax background elements to provide a sense of depth for a user while scrolling. Having some experience with parallax headers prior to this assignment we were able to write this code from memory, though originally learning how to create these effects through multiple tutorials online.</p> 
+                <p>Our exact implementation requires, in CSS, the background of a div to be held in position: fixed and centered in the x-direction, then upon scroll jQuery (see implementation in parascroll.js) calculates the background-position in the y-direction that the image is modified, with respect to the scrolling rate.</p>
+            </div>
+
+            <div class="text" id="gojs">
+                <h1>Glide Scrolling</h1>
+                <p>To accompany the parallax backgrounds we implemented javascript 'glide scrolling', a technique to automatically scroll a user to a specific point in the page in a clean and quick way. We have both had experience implementing this previously, after learning how it works in previous web self-study, so for this assignment we implemented a slightly modified version of a basic smooth slider we had implemented months ago (<a href="http://css-tricks.com/snippets/jquery/smooth-scrolling/" alt="smooth scrolling">link</a>) and adapted the animation speed to suit for this project.</p>
+                <p>This glide scrolling is utilized by the navigation bar, the footer navigation bar, the 'return to top' image at the bottom of the page and each section's footer logo which acts as a 'move-to-next-section' button.</p>
+            </div>
+
+
+            <div class="text" id="drawer">
+                <h1>Music Hidden Drawer</h1>
+                <p>We have implemented a hidden drawer in CSS and JavaScript for the Music section of the website. By animating the div and increasing the height we are able to create space for content to to extend on the option a user interacted with. The content divs for each option are hidden off the side of the page with height=0, when an option is pressed the jQuery checks to see if a content div currently occupies the space. If not, the option's selected respective content animates in from the side. Otherwise, the content currently occupying this area leaves and is replaced by a new div. This was a custom jQuery implementation tailored for this site's content and was by far the most time consuming aspect of the project as attempting to keep this section's design responsive was a lengthy and troublesome task.</p>
+                <p>When this drawer opens it displays extended information about the album, as well as a mockup of a music player and some buy links. We created the mockup music player in Photoshop, basing it on the Spotify app's styling. By creating a template of music player on one layer, with a secondary layer below for album artwork we were able to quickly create multiple music player mockups with the same dimensions and aesthetic. However, in the server side coursework we aim to implement a real custom music player. </p>
+                <p>Additionally in this section, we created animated windows on hover of the album artworks. This is a largely modified implementation of <a href="http://tympanus.net/Tutorials/OriginalHoverEffects/index6.html" alt="CSS tutorial">this tutorial</a> which we used to learn more about CSS animation.</p>
+            </div>
+
+            <div class="text" id="loading">
+                <h1>'Loading...'</h1>
+                <p>We created a preloader that allows the site to have an air of professionalism while it loads. Instead of witnessing the images steadily load in front of a user, a loading catch page makes sure the site is not displayed until it is complete. Neither of us had experience with creating pre-loaders before, however we had attempted to implement lightboxes in a previous project and applying the same principle was able to create one quickly. </p>
+                <p>Using a fixed div that occupies the full height and width of the screen, containing only a CSS-animated rotating .png created in Photoshop, creates the illusion of a loading page while hiding the real page-load behind it. We use jQuery to notice when the page has finished loading and then fade out the elements of the the preloader. The jQuery fade out animations were modified from an old lightbox implementation, which came from a tutorial used for self-study last year.</p>
+            </div>
+
+
+            <div class="text" id="carousel">
+                <h1>Video Carousel</h1>
+                <p>We implemented a placeholder video carousel that interacted with YouTube embeds to create a working video player. We had to use YouTube embeds as per the request of our client, their social statistics are important for radio, however such embeds require iFrames which SAFE does not seem to agree with. To detail this anyway, we created a custom play/pause button for the focus video, next/previous video button to change focus video, and animated thumbnails below into a loop carousel.</p>
+                <p>This was also a time consuming part of the project as learning how to interact with YouTube videos (in order to pause the one leaving the screen, avoiding multiple players with audio going at once) was not something we were previously experienced with. </p> 
+                <p>To see this implementation in a working state (including the YouTube video custom play/pause instructions) visit here: <a href="http://cyoa.co.uk/jordan/sub/" alt="Web Tech Submission">alternative host</a>.</p>
+            </div>
+
+            <div class="text" id="gallery">
+                <h1>Circular Image Gallery</h1>
+                <p>We implemented a simple image flow gallery where a single image changes to multiple different source images by animation. This was done following the tutorial of <a href="http://paulmason.name/item/simple-jquery-carousel-slider-tutorial" alt="Paul Mason Tutorial">Paul Mason</a> as an exercise of using transparent area of images for decoration.</p>
+                <p>While the jQuery is simple for this gallery, we added an extra effect by creating all of the images for the gallery in Photoshop. We created a template size and included all of the images on seperate layers, before placing a circle object over the top of them. By selecting the outline of the circle and then selecting inverse, before returning to an image layer and deleting the 'outside' of the circle it made it appear as though all the images are peering through a circular window due to their .png transparency.</p>
+            </div>
+
+            <div class="text" id="themecss">
+                <h1>Day and Night CSS Themes</h1>
+                <p>We created an alternate CSS file named theme.css. When this is added to the document, it overwrites some of the key styles on the page (nav bar, headers, etc) taking the site from a black and white dark theme to a colourful light theme.</p>
+                <p>We decided to use jQuery to get the current time and, if it's currently daytime, set the light theme, otherwise set the darker theme.</p>
+                <p>Originally we had themes selected based on a random integer, but too many themes made it a confusing user experience each time you refreshed. If a user prefers a particular theme, we have added a theme selection hyperlink to the footer's navigation. This seems to have some issues within SAFE in some browsers, however runs perfectly on the Node server with all browsers as well as locally and on our own hosting. I have uploaded a working version here: <a href="http://cyoa.co.uk/jordan/sub/" alt="mirrored upload">alternative upload</a>.</p>
+            </div>
+
+            <div class="text" id="konami">
+                <h1>Konami Code Keyboard Easter Egg</h1>
+                <p>If you press 'up up down down left right left right b a' on our site you will be taken to a surprise page. We used a Konami Code tutorial to learn how this is implemented on other sites and implemented it purely for fun, and for the learning experience.</p>
+            </div>
+
+            <div class="text" id="svgpaint">
+                <h1>Interactive SVG Neon Bible</h1>
+                <p>We created an Inkscape version of Arcade Fire's Neon Bible album cover, and used dynamic control over the SVG's paths to make a fun neon painting mini game where users are able to paint Neon Bible in colours selected at random upon click.</p>
+            </div>
+
+            <div class="text" id="wordpress">
+                <h1>WordPress</h1>
+                <p>Extensive CSS, JavaScript and some PHP was employed to re-skin a WordPress template for the current <a href="http://arcadefire.com" alt="arcade fire blog">arcadefire.com</a> site. Once again we made this site design responsive for mobile and tablet, and connected the theme of the layout with the main site.</p>
+                <p>We did not include these files in our submission as the WordPress requirements mean they will not adhere to the standards required, however we have uploaded the work we undertook for these parts of the project to <a href="http://cyoa.co.uk/jordan/webtechextras" alt="web tech extras">our own site</a> if you'd like to see.</p>
+            </div>
+
+            <div class="text" id="browser">
+                <h1>Cross-browser compatibility</h1>
+                <p>Our site works perfectly as required in Chrome, Firefox and Internet Explorer 9 after including some minor CSS fall-backs to cater for the differences between these browsers. We have also catered for previous versions of Internet Explorer by including fall-back CSS stylesheets tailored to them - these particularly focus on the browser's lack of support for transparency and opacity effects.</p>
+                <p>As the version of IE degrades, less of our site is supported, however instead of allowing the site to break and become a mess we attempted to degrade the site gracefully by removing the broken elements in these browsers and replacing them with less-functional elements.</p>
+            </div>
+
+                <div class="text" id="design">
+                <h1>Designing</h1>
+                <p>All of the custom buttons for our site, and the entirety of both blog and site's designs were first mocked up in Photoshop to allow stylistic choices and additional artistic exploration.</p>
+                <div class="textimg"><img src="screenshot2.png" alt="photoshop" /></div>
+                <p>As an experienced Photoshop and Gimp user, using multi-layer effects to create a dream design allows much more ambitious final design goal.</p>
+                <div class="textimg"><img src="screenshot3.png" alt="photoshop" /></div>
+            </div>
+
+            <div class="text" id="adminpanel">
+                <h1>Admin Panel & AngularJS</h1>
+                <p>
+                    We created a one-page-app admin panel using AngularJS. It had to be easy to navigate and only available to approved administrators. The layout of the admin panel is very simple in terms of HTML and CSS, and the functionality is partly based on AngularJS which injects content partials client-side for each editable section into the admin panel homepage. This approach allows the app to be scalable for future development if further sections of the site required editing, and requires no page reloading when navigating the admin panel.  
+                </p>
+                <p>
+                    Reduced page loading for administrators is a small touch based on a request from the band in which they noted that due to their traveling schedule they are often in places with expensive data, or poor data connections, so removing the burden of reloading the same information multiple times is useful, even though quite insignificant in scope due to the lightweightness of the app's admin panel. 
+                </p>
+
+            </div>
+
+            <div class="imp" id="serverside">
+                <h1 class="head">Server Side</h1>
+            </div>
+
+            <div class="text" id="nodejs">
+                <h1>NodeJS</h1>
+                <p>For the server we decided to use NodeJS, as this is a very new technology we were mostly unfamiliar with, and we were eager to learn it. Since our Content Management System application was due to be quite lightweight in terms of server-side computation, NodeJS allowed us to create the whole thing in Javascript, even including the database for which we were able to use JSON object storage in the form of MongoDB.</p> 
+
+                <p>NodeJS is less useful for relational database applications, however since this was not a requirement in our CMS specification, it was not a problem.</p>
+       
+            </div>
+
+            <div class="text" id="mongodb">
+                <h1>MongoDB</h1>
+                <p>We used MongoDB as our database for the website. MongoDB has a very unrestricted data model and is great for lots of small data operations while being highly scalable, which is a perfect fit for our lightweight CMS. It is also useful for it's performance with high concurrency reads.</p>
+            </div>
+
+            <div class="text" id="cms">
+                <h1>Content Management Overview</h1>
+                <p>The core of our application was to provide the ability for the band to edit the content on their website without requiring them to dig into the code of the site. To do this we created a database to hold the website's current content, used EJS templating to display this database's on the website in the relevant sections, and created an admin panel backend to allow an administritive user to modify what is stored in this database (and thus displayed on the main site).</p>
+                <p>This implementation means any member of the band could modify the content on the website from an easy-to-use control panel with no programming experience and very little tech-savvy.</p>
+                <p>
+                    The admin panel allows the user to: 
+                    <ul>
+                        <li>- Edit band biography</li>
+                        <li>- Update all 5 albums' information and buy links</li>
+                        <li>- Change the website's featured videos</li>
+                        <li>- Add new live dates</li>
+                        <li>- Remove erroneous live dates</li>
+                        <li>- Change their admin password</li>
+                        <li>- Create a new administrator account</li>
+                    </ul>
+                </p>
+            </div>
+
+            <div class="text" id="login">
+                <h1>Authenticated Access</h1>
+                <p>
+                    It was important to make sure that only an administrator is able to edit the website. To do this, we implemented authenticated access for the admin panel. We implemented a 'max_age' on a user's session to allow the maximum time of an admin panel session to be 5 minutes. While this would not be a typical implementation and could even perhaps become irritating for a different type of application (a social network for example), the client specifically requested auto-logout functionality after a set time. This request was due to previous events where the band had left important accounts with millions of followers/subscribers logged in on public computers during their travels/use of internet cafes/borrowed laptops. This feature now acts as a tailored log-out failsafe for this specific client, however would be reconsidered if this CMS were to be extended and repurposed for more general use.  
+                </p>
+                <p>
+                    Authenticated user documents were stored in our database as a <b>username</b>, <b>email address</b>, <b>user ID</b> and <b>password</b> (which was stored as a SHA1 hash with salt to improve security and make sure user's passwords were not stored as plaintext). 
+                </p>
+                 <p>
+                    To improve security, every time a new password was created (either changed by user, or in the instance of a new admin account being created) a new salt was used, 8 characters long and created randomly.
+                </p>
+            </div>
+
+            <div class="text" id="validate">
+                <h1>Data Validation (Both Client & Server Side)</h1>
+                <p>
+                    From within the admin panel the band can now update the various sections of their website without interacting with the html/ejs. For this reason it is important to do various checks to ensure the data they are entering in the website is valid and won't break the website. 
+                </p>
+                <p>
+                    We implemented both client side validation and server side validation. Implementing client side validation allowed us to easily alert the user to any mistakes they may have made when entering data without sending the data to the server. This is useful for regular site users and honest mistakes. However, it is easy to bypass client side form validation so it was also necessary for us to implement server side validation to prevent incorrect data ending up in the database on the chance the client side was bypassed, either accidentally or maliciously. 
+                </p>
+                <p>
+                    Here are some examples of the variety of validation implemented:
+                </p>
+                <p>
+                    Simple 'is not empty' validation. This was checked server side using req.assert's notEmpty() capability. Client side check was implemented using form validation, checking the form's value was not simply null or an empty string. 
+                </p>
+                <p>
+                    URL validation to make sure ticket links provided by the band or management were in the form of real URLs that linked to external sites (must begin with http:// or https://) and contains no trailing whitespace.  
+                </p>
+                <p>
+                    YouTube ID validation to verify the ID entered is between 10 and 12 characters and is strictly alphanumeric.
+                </p>
+            </div>
+
+            <div class="text" id="contentparse">
+                <h1>Parsing New Content & Data</h1>
+                <p>
+                    From within the admin panel the band can now update the various sections of their website without interacting with the html/ejs. For this reason it is important to do various checks to ensure the data they are entering in the website is valid and won't break the website. 
+                </p>
+                <p>
+                    We implemented both client side validation and server side validation. Implementing client side validation allowed us to easily alert the user to any mistakes they may have made when entering data without sending the data to the server. This is useful for regular site users and honest mistakes. However, it is easy to bypass client side form validation so it was also necessary for us to implement server side validation to prevent incorrect data ending up in the database on the chance the client side was bypassed, either accidentally or maliciously. 
+                </p>
+            </div>
+
+            <div class="text" id="https">
+                <h1>https://</h1>
+                 <p>?</p>
+                 <p>YouTube embed support was affected by this, forcing us to discover and consult the <a href="http://apiblog.youtube.com/2011/02/https-support-for-youtube-embeds.html">YouTube API Blog</a> to fix this error.</p>
+            </div>
+
+            <div class="text" id="csrf">
+                <h1>X-Site Request Forgery</h1>
+                 <p>Connect CSRF allows protection against cross-site request-forgery attacks using middleware tokens placed in a hidden form element and stored in the session. This is works by access to the form being forbidden if the hidden token is not located as present, or more simply if the session token does not match the body token.</p>
+            </div>
+               
+
+        </div>
+    </body>
+
+</html>
