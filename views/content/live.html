@@ -74,11 +74,11 @@
 			<% tour.forEach( function( dates ){ 
 
 		%>
-		<p><div class="show"> 
-            <div class="date"><%= dates.date%></div> 
+		<div class="show"> 
+            <div class="date"><%= dates.showDate%></div> 
             <div class="venue">  <div class="city"><%= dates.location%></div>  <%= dates.venue%><br /> </div> 
-            <a class="tickets" href="javascript:void(0)" target="_blank">Delete</a> 
-        </div></p>
+            <a class="tickets" href="/deleteDate/<%= dates._id %>" >Delete</a> 
+        </div>
 		<% 
 
 

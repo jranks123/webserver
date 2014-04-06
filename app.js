@@ -95,8 +95,9 @@ db.once('open', function callback () {
 	tourdatesschema = new mongoose.Schema({
 		location : String,
 		venue 	 : String,
-		date 	 : String,
-		tickets  : String
+		date 	 : Date,
+		tickets  : String,
+		showDate : String
 	});
 
 	// Compile a 'Movie' model using the movieSchema as the structure.
@@ -290,7 +291,8 @@ app.get('/', function (req, res){
 	  }
 	}
 
-		youtubevids.find({}, function(err, videolist){
+	youtubevids.find({}, function(err, videolist){
+		tourdates.find({}, function(err, datelist){
 			res.render('index', {
 				url1 : videolist[0].url,
 				url2 : videolist[1].url, 
@@ -300,6 +302,7 @@ app.get('/', function (req, res){
 				thumb3 : getScreen(videolist[2].url),
 			});
 		});
+	});
 });
 
 app.get('/admin', function (req, res){
@@ -350,14 +353,14 @@ app.get('/content/:name', function (req, res){
 	  });
 	}
 	else if(name == "live.html"){
-		tourdates.find({}, function(err, tour, count){
-			res.render('content/'+name,{
-				date : 'eg',
-				venue : 'eg',
-				tickets : 'eg',
-				tour : tour
-			});
-		});
+		tourdates.
+    		find().
+    			sort( {date: 1} ).
+    				exec( function ( err, tour){
+						res.render('content/'+name,{
+						tour : tour
+						});
+				});
 	}
 	else{
 		res.render('content/'+name,{	
@@ -371,16 +374,28 @@ app.get('/content/:name', function (req, res){
 
 
 app.post('/addNewDate', function(req, res) {
+	tourDate = new Date(req.body.year,req.body.month-1, req.body.day  );
 	 new tourdates({
 	 	location : req.body.location,
 		venue 	 : req.body.venue,
-		date 	 : req.body.day + "/" + req.body.month,
-		tickets  : req.body.tickets
+		showDate 	 : req.body.day + "/" + req.body.month + "/" + req.body.year,
+		tickets  : req.body.tickets,
+		date: tourDate
+
 
 	  }).save( function( err, tour, count ){
 	    res.redirect( 'admin_panel#/live' );
 	  });
 });
+
+app.get( '/deleteDate/:id', function ( req, res ){
+  	tourdates.findById( req.params.id, function ( err, dates ){
+    dates.remove( function ( err, dates ){
+      res.redirect( 'admin_panel#/live');
+    });
+  });
+});
+
 
 
 
