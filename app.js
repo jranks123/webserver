@@ -292,7 +292,7 @@ app.get('/', function (req, res){
 	}
 
 	youtubevids.find({}, function(err, videolist){
-		tourdates.find({}, function(err, datelist){
+		tourdates.find({}, function(err, tour){
 			res.render('index', {
 				url1 : videolist[0].url,
 				url2 : videolist[1].url, 
@@ -300,6 +300,7 @@ app.get('/', function (req, res){
 				thumb1 : getScreen(videolist[0].url),
 				thumb2 : getScreen(videolist[1].url),
 				thumb3 : getScreen(videolist[2].url),
+				tour : tour,
 			});
 		});
 	});
@@ -378,7 +379,7 @@ app.post('/addNewDate', function(req, res) {
 	 new tourdates({
 	 	location : req.body.location,
 		venue 	 : req.body.venue,
-		showDate 	 : req.body.day + "/" + req.body.month + "/" + req.body.year,
+		showDate 	 : req.body.day + "/" + req.body.month,
 		tickets  : req.body.tickets,
 		date: tourDate
 
