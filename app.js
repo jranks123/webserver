@@ -2,12 +2,14 @@
  * Module dependencies.
  */
 
+
 var express = require('express');
  var flash = require('connect-flash'); 
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var https = require('https');
+var fs = require('fs');
 var helmet = require('helmet');
 var path = require('path');
 var crypto = require('crypto');
@@ -18,9 +20,24 @@ var passport = require('passport');
 var LocalStrategy = require ('passport-local').Strategy;
 var expressValidator = require('express-validator');
 mongoose.connect('mongodb://localhost/arcadeDB');
-
+var options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
 
 var app = express();
+
+var port = 8000;
+
+var server = https.createServer(options, app).listen(port, function(){
+  console.log("Express server listening on port " + port);
+});
+
+
+/*https.createServer(options, function (req, res) {
+  res.writeHead(200);
+  res.end("hello world\n");
+}).listen(8000);*/
 
 app.engine('.html', require('ejs').renderFile);
 
@@ -113,16 +130,16 @@ app.configure(function(){
   app.use(expressValidator());
   app.use(express.methodOverride());
   app.use(express.cookieParser('secret'));
-  app.use(express.session({ cookie: {httpOnly:true, maxAge: 5*60*1000 } }));
+  app.use(express.session({ cookie: {httpOnly:true,  maxAge: 5*60*1000 } }));
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(passport.initialize());
   app.use(passport.session());
-  //app.use(requireHTTPS);
-  /*app.use(express.csrf());
+  app.use(requireHTTPS);
+  app.use(express.csrf());
   app.use(function (req, res, next) {
   	res.locals.csrftoken = req.session._csrf;
     next();
-  });*/
+  });
    app.use(app.router);
 
 });
@@ -316,6 +333,7 @@ var findCallback = function(err, data)
 
 
 app.get('/', function (req, res){
+
 
 	if(!dbIsOpen){		
 		console.log("db not open" );
@@ -573,8 +591,9 @@ app.post('/saveVideo', function(req, res) {
 
 
 
- 
+ /*
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+*/
