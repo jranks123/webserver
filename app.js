@@ -496,7 +496,6 @@ app.post('/addNewDate', function(req, res) {
 	var urlhandler = req.body.tickets;
 	var validURL = urlChecker(urlhandler);
 
-
 	if ((!errors) && (validURL==1)){
 		tourDate = new Date(req.body.year,req.body.month-1, req.body.day  );
 		 new tourdates({
@@ -529,9 +528,27 @@ app.get( '/deleteDate/:id', function ( req, res ){
 
 
 app.post('/saveVideo', function(req, res) {
+	req.assert('left', 'Featured video must be 11 char code').len(10,12);
+	req.assert('middle', 'Featured video must be 11 char code').len(10,12);
+	req.assert('right', 'Featured video must be 11 char code').len(10,12);
+	var errors = req.validationErrors();
 
+	function IDCheck(id){
+		var alphanum = /((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;
+		if(!alphanum.test(id)){
+			return 1;
+		}
+	    else{
+	    	return 0;
+		}
+	}
 
+	var vide1 = req.body.left;
+	var vide2 = req.body.middle;
+	var vide3 = req.body.right;
+	var validIDs = IDCheck(vide1)+IDCheck(vide2)+IDCheck(vide3);
 
+	if (!errors && validIDs==0) {
 	  youtubevids.findOneAndUpdate({name:"vid1"}, { $set: { url: req.body.left}}, {upsert:true},  function(err, person) {
 	  if (err) {
 	    console.log('got an error');
@@ -554,7 +571,10 @@ app.post('/saveVideo', function(req, res) {
      });
 	  }
      });
-	});
+	} else{
+		res.redirect( 'admin_panel#/failVideo');
+	}
+});
 
 
 

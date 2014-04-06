@@ -77,6 +77,11 @@
 				controller  : 'themesController'
 			})
 
+			.when('/failVideo', {
+				templateUrl : 'content/failvideo.html',
+				controller  : 'themesController'
+			})
+
 			.when('/account', {
 				templateUrl : 'content/user.html',
 				controller  : 'userController'

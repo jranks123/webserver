@@ -171,6 +171,16 @@ input[type="text"]
   margin: 4px 4px;
 }
 
+input[type="password"]
+{
+  outline: none;
+  width:200px;
+  margin: 0 0 0 5px;
+  font-size: 14px;
+  line-height: 22px;
+  margin: 4px 4px;
+}
+
 .button {
     border: 1px solid #ccc;
     background: #fff;

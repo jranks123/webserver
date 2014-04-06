@@ -1,9 +1,6 @@
 <div>
-		<h1>Live Dates</h1>
-
-		<p>Add new live date:</p>
-		<br />
-		<form action="/addNewDate" onsubmit="return formChecker();" method="post" name="liveDatesForm">
+		<h1>Add new live date</h1>
+		<form action="/addNewDate" onsubmit="return liveFormChecker();" method="post" name="liveDatesForm">
 		Date: <select name="day" id="day">
   				<option value="01">1</option>
   				<option value="02">2</option>
@@ -69,7 +66,7 @@
 		Ticket link: <input type="text" name="tickets">
 		<br /><p><input type="submit" value="Add" class="button"></p>
 	</form>
-		<br /><p>Current live dates:</p>
+		<br /><h1>Current live dates</h1>
 		<div class = "dates">
 			<% tour.forEach( function( dates ){ 
 
