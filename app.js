@@ -293,15 +293,19 @@ app.get('/', function (req, res){
 	}
 
 	youtubevids.find({}, function(err, videolist){
-		tourdates.find({}, function(err, tour){
-			res.render('index', {
-				url1 : videolist[0].url,
-				url2 : videolist[1].url, 
-				url3 : videolist[2].url,
-				thumb1 : getScreen(videolist[0].url),
-				thumb2 : getScreen(videolist[1].url),
-				thumb3 : getScreen(videolist[2].url),
-				tour : tour,
+		tourdates.
+			find().
+				sort({ date:1 }). 
+					exec( function(err, tour){
+						res.render('index', {
+						url1 : videolist[0].url,
+						url2 : videolist[1].url, 
+						url3 : videolist[2].url,
+						thumb1 : getScreen(videolist[0].url),
+						thumb2 : getScreen(videolist[1].url),
+						thumb3 : getScreen(videolist[2].url),
+						tour : tour,
+
 			});
 		});
 	});
