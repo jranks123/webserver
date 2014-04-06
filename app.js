@@ -410,10 +410,13 @@ app.get('/admin_panel', ensureAuthenticated, function (req, res){
 
 
 
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/admin_panel');
+});
 
 
-
-app.get('/content/:name', /*ensureAuthenticated,*/ function (req, res){
+app.get('/content/:name', ensureAuthenticated, function (req, res){
 
 
 	if(!dbIsOpen){		
