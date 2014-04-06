@@ -217,13 +217,11 @@ function generateHash(password){
 function verifyHash(password, hash){
 
 	var hashParts = hash.split('$');
-	console.log(hashParts.length);
 	if(hashParts.length == 3){
 		hashParts.splice(2, 0, 1);
 		hash = hashParts.join("$");
 	}
 
-	console.log('generated = '+generateFinalHash(hashParts[0], hashParts[1], password, hashParts[2]));
 
 
 
@@ -256,7 +254,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
     else
     {
     	console.log("Incorrect")
-        return done(null, false, { message: 'Incorrect password.' });
+        return done(null, false, { message: 'Incorrect Login Details' });
 	}
 
 
@@ -277,7 +275,6 @@ app.post('/login',
 
 app.post('/changePass', ensureAuthenticated, function(req, res){
 
-	console.log(req.user.hash);
 	if (verifyHash(req.body.currentPassword, req.user.hash)){
 		if(req.body.newPassword == req.body.confPassword){
 			  users.findOneAndUpdate({_id:req.user._id}, { $set: { hash: generateHash(req.body.newPassword)}}, {upsert:true},  function(err, person) {
