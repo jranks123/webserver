@@ -3,10 +3,14 @@
  */
 
 var express = require('express');
+ var flash = require('connect-flash'); 
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var crypto = require('crypto');
+var len = 128;
+var iterations = 12000;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require ('passport-local').Strategy;
@@ -78,6 +82,8 @@ var youtubevids;
 var youtubeVidSchema ;
 var tourdates;
 var tourdatesschema;
+var userSchema;
+var users;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
   	dbIsOpen = true;
@@ -87,9 +93,10 @@ db.once('open', function callback () {
 	  url: { type: String }
 	});
 
-	var users = new mongoose.Schema({
-	  username : String,
-	  password : String
+	userSchema = new mongoose.Schema({
+	    username: String,
+	    salt: String,
+	    hash: String
 	});
 
 	tourdatesschema = new mongoose.Schema({
@@ -104,89 +111,43 @@ db.once('open', function callback () {
 	// Compile a 'Movie' model using the movieSchema as the structure.
 	// Mongoose also creates a MongoDB collection called 'Movies' for these documents.
 	youtubevids = mongoose.model('youtubevids', youtubeVidSchema);
-	users = mongoose.model('users', users);
+	users = mongoose.model('users', userSchema);
 	tourdates = mongoose.model('tourdates', tourdatesschema);
 	//lower case?
 
-/*	var usernameAdmin = new users({
-		username : 'admin',
-		password : 'password'
-	})
 
-	usernameAdmin.save(function(err, usernameAdmin) {
-	  if (err) return console.error(err);
-	  console.dir(usernameAdmin);
-	});*/
-/*	//VID1
-	var vid1 = new YoutubeVids({
-		name : vid1,
-		url : '8dqEJSTLOQM'
-	})
-
-	vid1.save(function(err, vid1) {
-	  if (err) return console.error(err);
-	  console.dir(vid1);
-	});*/
-
-/*	YoutubeVids.findOne({ title: 'vid1' }, function(err, vid1) {
-	  if (err) return console.error(err);
-	  console.log(vid1.url);
-	}); */
-
-
-
-	//VID2
-/*	var vid2 = new YoutubeVids({
-		name : vid2,
-		url : 'T4JrQpzno5Y'
-	})
-
-	vid2.save(function(err, vid2) {
-	  if (err) return console.error(err);
-	  console.dir(vid2);
-	});*/
-
-	/*YoutubeVids.findOne({ title: 'vid2' }, function(err, vid2) {
-	  if (err) return console.error(err);
-	  console.log(vid2.url);
-	});*/
-
-
-	//VID3
-/*	var vid3 = new YoutubeVids({
-		name : vid3,
-		url : 'EcKinnMXuKg'
-	})
-
-	vid3.save(function(err, vid3) {
-	  if (err) return console.error(err);
-	  console.dir(vid3);
-	});*/
-
-/*	YoutubeVids.findOne({ title: 'vid3' }, function(err, vid3) {
-	  if (err) return console.error(err);
-	  console.log(vid1.url);
-	});*/
 });
 
 
 
 
-
-
-var userSchema = mongoose.Schema({
-    username: String,
-    password: String
-});
-userSchema.methods.validPassword = function (password) {
-  if (password === this.password) {
-    return true; 
-  } else {
-    return false;
-  }
+/*function authenticatedCheck(req, res, next){
+    if(req.isAuthenticated()){
+        next();
+    }else{
+        res.redirect("/admin");
+    }
 }
-var User = mongoose.model('User', userSchema);
+
+function userExist(req, res, next) {
+    users.count({
+        username: req.body.username
+    }, function (err, count) {
+        if (count === 0) {
+            next();
+        } else {
+            // req.session.error = "User Exist"
+            res.redirect("/admin");
+        }
+    });
+}*/
+
+
+
+
+
 app.configure(function(){
+  app.use(flash());
   app.set('views', __dirname + '/views');
   app.use(express.favicon());
   app.use(express.logger('dev'));
@@ -204,16 +165,91 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+
+
 passport.serializeUser(function(user, done) {
-  done(null, user);
+    done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(id, done) {
+            users.findById(id, function(err,user){        
+                if(err){done(err);}
+                	done(null,user);
+            });
 });
+
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/admin')
+}
+
+//app.get('/helloworld', ensureAuthenticated, routes.helloworld);
+//app.get('/login', routes.login);
+app.post('/login',
+  	passport.authenticate('local', { successRedirect: '/admin_panel',
+                                   failureRedirect: '/admin',
+                                   failureFlash: true })
+);
+
+
+
+function generateFinalHash(algorithm, salt, password, numberOfIterations){
+	try {
+	    var hash = password;
+	    for(var i=0; i<numberOfIterations; ++i) {
+	      hash = crypto.createHmac(algorithm, salt).update(hash).digest('hex');
+	    }
+	    return algorithm + '$' + salt + '$' + numberOfIterations + '$' + hash;
+	  } catch (e) {
+	    throw new Error('Invalid message digest');
+	  }
+
+}
+
+function generateHash(password){
+
+	if(typeof password != 'string' ){
+		//validation
+	}
+	if(password.lenght < 7){
+		//validation
+	}
+
+	//generate salt of length 8
+	var saltLength = 8;
+	var algorithm = 'sha1';
+	var numberOfIterations = 1;
+	var salt = crypto.randomBytes(Math.ceil(saltLength / 2)).toString('hex').substring(0, saltLength);
+	return(generateFinalHash(algorithm, salt, password, numberOfIterations))
+}
+
+
+
+
+function verifyHash(password, hash){
+
+	var hashParts = hash.split('$');
+	console.log(hashParts.length);
+	if(hashParts.length == 3){
+		hashParts.splice(2, 0, 1);
+		hash = hashParts.join("$");
+	}
+
+	console.log('generated = '+generateFinalHash(hashParts[0], hashParts[1], password, hashParts[2]));
+
+
+
+	if(hash == generateFinalHash(hashParts[0], hashParts[1], password, hashParts[2])){
+		return true;
+	}else{
+		return false;
+	}
+}
+
 
 passport.use(new LocalStrategy(function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
+    users.findOne({ username: username }, function(err, user) {
       if (err) { 
         return done(err); 
       }
@@ -221,10 +257,23 @@ passport.use(new LocalStrategy(function(username, password, done) {
       	console.log("Incorrect Login Details");
         return done(null, false, { message: 'Incorrect Login Details' });
       }
-      if (password != user.password || !user) {
-      	console.log("Incorrect Login Details");
-        return done(null, false, { message: 'Incorrect Login Details' });
-      }
+
+
+  //  var testHash = generateHash('password');
+   // console.log('test hash = ' + testHash);
+
+	if (verifyHash(password, user.hash)) 
+    {
+    	console.log("correct pass")
+    	return done(null, user._id);
+    }
+    else
+    {
+    	console.log("Incorrect")
+        return done(null, false, { message: 'Incorrect password.' });
+	}
+
+
       return done(null, user);
     });
   }
@@ -235,6 +284,7 @@ app.post('/login',
   passport.authenticate('local', {
     successRedirect: '/admin_panel',
     failureRedirect: '/admin',
+     failureFlash: true
   })
 );
 
@@ -293,16 +343,19 @@ app.get('/', function (req, res){
 	}
 
 	youtubevids.find({}, function(err, videolist){
-		tourdates.find({}, function(err, tour){
-			res.render('index', {
-				url1 : videolist[0].url,
-				url2 : videolist[1].url, 
-				url3 : videolist[2].url,
-				thumb1 : getScreen(videolist[0].url),
-				thumb2 : getScreen(videolist[1].url),
-				thumb3 : getScreen(videolist[2].url),
-				tour : tour,
-			});
+		tourdates.
+    		find().
+    			sort( {date: 1} ).
+    			    	exec( function ( err, tour){
+					res.render('index', {
+						url1 : videolist[0].url,
+						url2 : videolist[1].url, 
+						url3 : videolist[2].url,
+						thumb1 : getScreen(videolist[0].url),
+						thumb2 : getScreen(videolist[1].url),
+						thumb3 : getScreen(videolist[2].url),
+						tour : tour,
+					});
 		});
 	});
 });
@@ -318,7 +371,7 @@ app.get('/admin_reset', function (req, res){
 	});
 
 
-app.get('/admin_panel', function (req, res){
+app.get('/admin_panel', ensureAuthenticated, function (req, res){
 
 
 	if(!dbIsOpen){		
@@ -335,7 +388,7 @@ app.get('/admin_panel', function (req, res){
 
 
 
-app.get('/content/:name', function (req, res){
+app.get('/content/:name', ensureAuthenticated, function (req, res){
 
 
 	if(!dbIsOpen){		
