@@ -3,7 +3,8 @@
 
 		<p>Add new live date:</p>
 		<br />
-		Date: <select>
+		<form action="/addLiveDate" method="post">
+		Date: <select name="day" id="day">
   				<option value="01">1</option>
   				<option value="02">2</option>
   				<option value="03">3</option>
@@ -37,7 +38,7 @@
  				<option value="31">31</option>
 			</select>
 
-		<select>
+		<select name="month" id="month">
   				<option value="01">January</option>
   				<option value="02">February</option>
   				<option value="03">March</option>
@@ -53,7 +54,7 @@
 			</select>
 
 
-		<select>
+		<select name="year" id="year">
 				<option value="2014">2014</option>
 				<option value="2015">2015</option>
 				<option value="2016">2016</option>
@@ -67,18 +68,19 @@
 		<br />
 		Ticket link: <input type="text" name="tickets">
 		<br /><p><input type="submit" value="Add"></p>
+	</form>
 		<br />
 		<p>Current live dates:</p>
 
 		<div class="dates">
 		<p><div class="show"> 
-            <div class="date">14/03</div> 
-            <div class="venue">  <div class="city">Glastonbury, UK</div>  Glastonbury Music and Arts Festival<br /> </div> 
+            <div class="date"><%= date1%></div> 
+            <div class="venue">  <div class="city"><%= loc1%></div>  <%= venue1%><br /> </div> 
             <a class="tickets" href="javascript:void(0)" target="_blank">Delete</a> 
         </div></p>
         <p><div class="show"> 
-            <div class="date">16/03</div> 
-            <div class="venue">  <div class="city">Bristol, UK</div>  Rankin's Festival<br /> </div> 
+            <div class="date"><%= date2%></div> 
+            <div class="venue">  <div class="city"><%= loc2%></div>  <%= venue2%><br /> </div> 
             <a class="tickets" href="javascript:void(0)" target="_blank">Delete</a> 
         </div></p>
     	</div>
