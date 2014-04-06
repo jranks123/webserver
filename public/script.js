@@ -66,6 +66,11 @@
 				controller  : 'themesController'
 			})
 
+			.when('/saveVideo', {
+				templateUrl : 'content/video.html',
+				controller  : 'themesController'
+			})
+
 			.when('/account', {
 				templateUrl : 'content/user.html',
 				controller  : 'userController'

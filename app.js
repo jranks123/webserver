@@ -311,14 +311,6 @@ app.get('/admin_panel', function (req, res){
 		console.log("db not open" );
 		return;
 	}
-
-		YoutubeVids.find({}, function(err, videolist){
-			res.render('admin_home', {
-				adurl1 : videolist[0].url,
-				adurl2 : videolist[1].url, 
-				adurl3 : videolist[2].url,
-			});
-		});
 });
 
 
@@ -353,20 +345,35 @@ app.get('/content/:name', function (req, res){
 
 
 
+
+
+
+
 app.post('/saveVideo', function(req, res) {
 
 
-  youtubevids.findOneAndUpdate({name:"vid1"}, { $set: { url: 'T4JrQpzno5Y' }}, {upsert:true},  function(err, person) {
-  if (err) {
-    console.log('got an error');
-  }else{
-  	res.render('content/video.html') ,{
-  		//need to grab text from boxes
-  	}
-  }
 
+	  youtubevids.findOneAndUpdate({name:"vid1"}, { $set: { url: req.body.left}}, {upsert:true},  function(err, person) {
+	  if (err) {
+	    console.log('got an error');
+	  }else{
+	  	
 
-
+	  youtubevids.findOneAndUpdate({name:"vid2"}, { $set: { url: req.body.middle }}, {upsert:true},  function(err, person) {
+	  if (err) {
+	    console.log('got an error');
+	  }else{
+	  	
+  		  youtubevids.findOneAndUpdate({name:"vid3"}, { $set: { url: req.body.right }}, {upsert:true},  function(err, person) {
+		  if (err) {
+		    console.log('got an error');
+		  }else{
+  			res.redirect('admin_panel#/video')	  	
+	  }
+     });	  	
+	  }
+     });
+	  }
      });
 	});
 
