@@ -7,6 +7,8 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
+var https = require('https');
+var helmet = require('helmet');
 var path = require('path');
 var crypto = require('crypto');
 var len = 128;
@@ -37,47 +39,14 @@ app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
 
+function requireHTTPS(req, res, next) {
+    if (!req.secure) {
+        //FYI this should work for local development as well
+        return res.redirect('https://' + req.get('host') + req.url);
+    }
+    next();
+}
 
-/*
-app.configure('development', function(){
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-
-app.configure('production', function(){
-    app.use(express.errorHandler());
-});
-
-
-
-
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (user.password != password) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
-
-
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
-
-
-*/
 var db = mongoose.connection;
 var dbIsOpen = false;
 var youtubevids;
@@ -99,7 +68,7 @@ db.once('open', function callback () {
 
 	userSchema = new mongoose.Schema({
 	    username: String,
-	    salt: String,
+	    email : String,
 	    hash: String
 	});
 
@@ -116,9 +85,6 @@ db.once('open', function callback () {
 		bio : String
 	});
 
-
-	// Compile a 'Movie' model using the movieSchema as the structure.
-	// Mongoose also creates a MongoDB collection called 'Movies' for these documents.
 	youtubevids = mongoose.model('youtubevids', youtubeVidSchema);
 	users = mongoose.model('users', userSchema);
 	tourdates = mongoose.model('tourdates', tourdatesschema);
@@ -132,29 +98,6 @@ db.once('open', function callback () {
 
 
 
-/*function authenticatedCheck(req, res, next){
-    if(req.isAuthenticated()){
-        next();
-    }else{
-        res.redirect("/admin");
-    }
-}
-
-function userExist(req, res, next) {
-    users.count({
-        username: req.body.username
-    }, function (err, count) {
-        if (count === 0) {
-            next();
-        } else {
-            // req.session.error = "User Exist"
-            res.redirect("/admin");
-        }
-    });
-}*/
-
-
-
 
 
 app.configure(function(){
@@ -163,14 +106,25 @@ app.configure(function(){
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
+  app.use(helmet.xframe());
+  app.use(helmet.iexss());
+  app.use(helmet.contentTypeOptions());
+  app.use(helmet.cacheControl());
   app.use(expressValidator());
   app.use(express.methodOverride());
-  app.use(express.cookieParser());
-  app.use(express.session({ cookie: { maxAge: 500000 }, secret: 'secret' }));
+  app.use(express.cookieParser('secret'));
+  app.use(express.session({ cookie: {httpOnly:true, maxAge: 5*60*1000 } }));
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(app.router);
+  //app.use(requireHTTPS);
+  /*app.use(express.csrf());
+  app.use(function (req, res, next) {
+  	res.locals.csrftoken = req.session._csrf;
+    next();
+  });*/
+   app.use(app.router);
+
 });
 
 app.configure('development', function(){
@@ -196,8 +150,6 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/admin')
 }
 
-//app.get('/helloworld', ensureAuthenticated, routes.helloworld);
-//app.get('/login', routes.login);
 app.post('/login',
   	passport.authenticate('local', { successRedirect: '/admin_panel',
                                    failureRedirect: '/admin',
@@ -300,8 +252,44 @@ app.post('/login',
 );
 
 
+app.post('/changePass', ensureAuthenticated, function(req, res){
+
+	console.log(req.user.hash);
+	if (verifyHash(req.body.currentPassword, req.user.hash)){
+		if(req.body.newPassword == req.body.confPassword){
+			  users.findOneAndUpdate({_id:req.user._id}, { $set: { hash: generateHash(req.body.newPassword)}}, {upsert:true},  function(err, person) {
+				  if (err) {
+				    console.log('got an error');
+				  }else{
+				  }
+
+			});
+		}else{
+			console.log("Please check that new password and confirm password are the same");
+		}
+
+	}else{
+		console.log("incorrect password");
+	}
+	res.redirect('admin_panel#/account')
+	});
 
 
+app.post('/createUser', ensureAuthenticated, function(req, res){
+	if(req.body.newPass == req.body.confPass){
+		hashNew = generateHash(req.body.newPass);
+		new users({
+			username: req.body.newUsername,
+			hash 	 : hashNew,
+			email : req.body.newEmail
+			  }).save( function( err, tour, count ){
+			    res.redirect( 'admin_panel#/account' );
+			  });
+	}else{
+		console.log("Passwords not the same");
+		res.redirect( 'admin_panel#/account' );
+	}
+});
 
 
 
@@ -405,7 +393,7 @@ app.get('/admin_panel', ensureAuthenticated, function (req, res){
 
 
 
-app.get('/content/:name', ensureAuthenticated, function (req, res){
+app.get('/content/:name', /*ensureAuthenticated,*/ function (req, res){
 
 
 	if(!dbIsOpen){		
@@ -581,28 +569,6 @@ app.post('/saveVideo', function(req, res) {
 
 
     
-
-
-
-
-
-
-    	//IGNORE ALL BELOW
-
-        // Set our collection
-      /*  var collection = db.find('YoutubeVids');
-
-        // Submit to the DB
-        collection.update(
-        	{name: "vid1"},
-        	{
-        		name:"vid1",
-        		url:"hello"
-        	},
-        	{upsert: true}
-        );*/
-
-   // });
 
 
 
