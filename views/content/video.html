@@ -1,23 +1,11 @@
-<script>
-  function Ctrl($scope) {
-    $scope.submit = function() {
-      if ($scope.text) {
-      	console.log(this.text);
-      }
-    };
-  }
-</script>
-
 	<div>
 	<h1>Video</h1>
-		<form name="video-form" class="video-form" action="/saveVideo" method="post" ng-submit="submit()" ng-controller="Ctrl">
-			<p>Control ArcadeFire.com's featured YouTube videos by adding URLs below:</p>
+		<form action="/saveVideo" method="post" onsubmit="return videoFormChecker();" name="videoForm">
+			<p>Control ArcadeFire.com's featured YouTube videos by adding Youtube IDs below:</p>
 			<br />
-			<p>Default main video URL: <input type="text" name="left" value = "<%= adurl1%>" ng-model="text"></p>
-			<br />
-			<p>Default left video URL: <input type="text" name="middle" value = "<%= adurl2%>"></p>
-			<br />
-			<p>Default right video URL: <input type="text" name="right" value = "<%= adurl3%>"></p>
+			<p>Default main video ID: <input type="text" name="left" value = "<%= adurl1%>"></p>
+			<p>Default left video ID: <input type="text" name="middle" value = "<%= adurl2%>"></p>
+			<p>Default right video ID: <input type="text" name="right" value = "<%= adurl3%>"></p>
 			<br />
 			<p><input type="submit" value="Save" id="submit" class="button"></p>
 		</form>
