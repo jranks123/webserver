@@ -311,35 +311,20 @@
             </div>
             <div class="sectionContent">
                 <div id="tour">
+                    <% tour.forEach( function( dates ){ 
+
+                     %>
                     <div class="show"> 
-                        <div class="date">14/03</div> 
-                        <div class="venue">  <div class="city">Glastonbury, UK</div>  Glastonbury Music and Arts Festival<br /> </div> 
-                        <a class="tickets" href="javascript:void(0)" target="_blank">Tickets</a> 
+                        <div class="date"><%= dates.showDate%></div> 
+                        <div class="venue">  <div class="city"><%= dates.location%></div>  <%= dates.venue%><br /> </div> 
+                        <a class="tickets" href="<%= dates.showDate%>" target="_blank">Tickets</a> 
                         <div class="clear"></div>
                     </div>
 
-                    <div class="show"> 
-                        <div class="date">15/03</div> 
-                        <div class="venue">  <div class="city">Bristol, UK</div>  Rankin's Heritage Festival<br /> </div> 
-                        <a class="tickets" href="javascript:void(0)" target="_blank">Tickets</a> 
-                        <div class="clear"></div>
-                    </div>
-
-                    <div class="show"> 
-                        <div class="date">16/03</div> 
-                        <div class="venue">  <div class="city">Berlin, Germany</div>  Koko Music Hall<br /> </div> 
-                        <a class="tickets" href="javascript:void(0)" target="_blank">Tickets</a> 
-                        <div class="clear"></div>
-                    </div>
-
-                    <div class="show"> 
-                        <div class="date">19/03</div> 
-                        <div class="venue">  <div class="city">Paris, France</div>  Le Grande Palace<br /> </div> 
-                        <a class="tickets" href="javascript:void(0)" target="_blank">Tickets</a> 
-                        <div class="clear"></div>
-                    </div>
+                <% 
 
 
+                }); %>
                 </div>
 
                 <div class="sectionfooter"><a href="#journal"><img class = "borderless" src="img/logo_small_white.png" alt="Logo"/></a></div>

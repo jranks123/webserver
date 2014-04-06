@@ -95,9 +95,11 @@ db.once('open', function callback () {
 	tourdatesschema = new mongoose.Schema({
 		location : String,
 		venue 	 : String,
-		date 	 : String,
-		tickets  : String
+		date 	 : Date,
+		tickets  : String,
+		showDate : String
 	});
+
 
 	// Compile a 'Movie' model using the movieSchema as the structure.
 	// Mongoose also creates a MongoDB collection called 'Movies' for these documents.
@@ -290,7 +292,8 @@ app.get('/', function (req, res){
 	  }
 	}
 
-		youtubevids.find({}, function(err, videolist){
+	youtubevids.find({}, function(err, videolist){
+		tourdates.find({}, function(err, tour){
 			res.render('index', {
 				url1 : videolist[0].url,
 				url2 : videolist[1].url, 
@@ -298,8 +301,10 @@ app.get('/', function (req, res){
 				thumb1 : getScreen(videolist[0].url),
 				thumb2 : getScreen(videolist[1].url),
 				thumb3 : getScreen(videolist[2].url),
+				tour : tour,
 			});
 		});
+	});
 });
 
 app.get('/admin', function (req, res){
@@ -329,6 +334,7 @@ app.get('/admin_panel', function (req, res){
 
 
 
+
 app.get('/content/:name', function (req, res){
 
 
@@ -350,16 +356,14 @@ app.get('/content/:name', function (req, res){
 	  });
 	}
 	else if(name == "live.html"){
-		tourdates.find({}, function(err, tourdateslist){
-			res.render('content/'+name,{
-				date1 : tourdateslist[0].date,
-				venue1 : tourdateslist[0].venue,
-				loc1 : tourdateslist[0].location,
-				date2 : tourdateslist[1].date,
-				venue2 : tourdateslist[1].venue,
-				loc2 : tourdateslist[1].location,
-			});
-		});
+		tourdates.
+    		find().
+    			sort( {date: 1} ).
+    				exec( function ( err, tour){
+						res.render('content/'+name,{
+						tour : tour
+						});
+				});
 	}
 	else{
 		res.render('content/'+name,{	
@@ -372,11 +376,35 @@ app.get('/content/:name', function (req, res){
 
 
 
+app.post('/addNewDate', function(req, res) {
+	tourDate = new Date(req.body.year,req.body.month-1, req.body.day  );
+	 new tourdates({
+	 	location : req.body.location,
+		venue 	 : req.body.venue,
+		showDate 	 : req.body.day + "/" + req.body.month,
+		tickets  : req.body.tickets,
+		date: tourDate
+
+
+	  }).save( function( err, tour, count ){
+	    res.redirect( 'admin_panel#/live' );
+	  });
+});
+
+app.get( '/deleteDate/:id', function ( req, res ){
+  	tourdates.findById( req.params.id, function ( err, dates ){
+    dates.remove( function ( err, dates ){
+      res.redirect( 'admin_panel#/live');
+    });
+  });
+});
 
 
 
 
 app.post('/saveVideo', function(req, res) {
+
+
 
 	  youtubevids.findOneAndUpdate({name:"vid1"}, { $set: { url: req.body.left}}, {upsert:true},  function(err, person) {
 	  if (err) {
@@ -402,6 +430,17 @@ app.post('/saveVideo', function(req, res) {
      });
 	});
 
+
+
+
+
+    
+
+
+
+
+
+
     	//IGNORE ALL BELOW
 
         // Set our collection
@@ -418,6 +457,11 @@ app.post('/saveVideo', function(req, res) {
         );*/
 
    // });
+
+
+
+
+ 
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
