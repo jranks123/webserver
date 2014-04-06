@@ -82,6 +82,16 @@
 				controller  : 'themesController'
 			})
 
+			.when('/failPassword', {
+				templateUrl : 'content/failpass.html',
+				controller  : 'themesController'
+			})
+
+			.when('/failAddUser', {
+				templateUrl : 'content/failadduser.html',
+				controller  : 'themesController'
+			})
+
 			.when('/account', {
 				templateUrl : 'content/user.html',
 				controller  : 'userController'
