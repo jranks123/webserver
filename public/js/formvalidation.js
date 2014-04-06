@@ -74,3 +74,18 @@ function videoFormChecker() {
 	  return false;
 	}
 }
+
+
+function userFormChecker() {
+	
+	//USER URL FORM
+	var vid1=document.forms["videoForm"]["left"].value;
+	var vid2=document.forms["videoForm"]["middle"].value;
+	var vid3=document.forms["videoForm"]["right"].value;
+	
+	if (!IDvalid==0)
+	{
+	  alert("You must enter a valid YouTube IDs. Valid YouTube IDs are strictly alphanumeric.");
+	  return false;
+	}
+}
