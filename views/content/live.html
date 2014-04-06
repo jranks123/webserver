@@ -3,7 +3,7 @@
 
 		<p>Add new live date:</p>
 		<br />
-		<form action="/addNewDate" method="post">
+		<form action="/addNewDate" onsubmit="return formChecker();" method="post" name="liveDatesForm">
 		Date: <select name="day" id="day">
   				<option value="01">1</option>
   				<option value="02">2</option>
@@ -67,9 +67,9 @@
 		Venue: <input type="text" name="venue">
 		<br />
 		Ticket link: <input type="text" name="tickets">
-		<br /><p><input type="submit" value="Add"></p>
+		<br /><p><input type="submit" value="Add" class="button"></p>
 	</form>
-		<br />
+		<br /><p>Current live dates:</p>
 		<div class = "dates">
 			<% tour.forEach( function( dates ){ 
 
@@ -83,5 +83,4 @@
 
 
 	}); %>
-
 </div>

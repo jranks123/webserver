@@ -171,9 +171,10 @@ input[type="text"]
   margin: 4px 4px;
 }
 
-input[type="button"]
-{
-width:120px;
+.button {
+    border: 1px solid #ccc;
+    background: #fff;
+    padding: 7px 15px;
 }
 
 select {

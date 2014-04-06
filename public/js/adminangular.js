@@ -71,6 +71,12 @@
 				controller  : 'themesController'
 			})
 
+
+			.when('/failDate', {
+				templateUrl : 'content/faildate.html',
+				controller  : 'themesController'
+			})
+
 			.when('/account', {
 				templateUrl : 'content/user.html',
 				controller  : 'userController'
