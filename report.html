@@ -237,6 +237,7 @@
             <div class="text" id="mongodb">
                 <h1>MongoDB</h1>
                 <p>We used MongoDB as our database for the website. MongoDB has a very unrestricted data model and is great for lots of small data operations while being highly scalable, which is a perfect fit for our lightweight CMS. It is also useful for it's performance with high concurrency reads.</p>
+                <p>We used MongoDB as our database for the website. MongoDB has a very unrestricted data model and is great for lots of small data operations while being highly scalable, which is a perfect fit for our lightweight CMS. It is also useful for it's performance with high concurrency reads.</p>
             </div>
 
             <div class="text" id="cms">
@@ -262,7 +263,7 @@
                     It was important to make sure that only an administrator is able to edit the website. To do this, we implemented authenticated access for the admin panel. We implemented a 'max_age' on a user's session to allow the maximum time of an admin panel session to be 5 minutes. While this would not be a typical implementation and could even perhaps become irritating for a different type of application (a social network for example), the client specifically requested auto-logout functionality after a set time. This request was due to previous events where the band had left important accounts with millions of followers/subscribers logged in on public computers during their travels/use of internet cafes/borrowed laptops. This feature now acts as a tailored log-out failsafe for this specific client, however would be reconsidered if this CMS were to be extended and repurposed for more general use.  
                 </p>
                 <p>
-                    Authenticated user documents were stored in our database as a <b>username</b>, <b>email address</b>, <b>user ID</b> and <b>password</b> (which was stored as a SHA1 hash with salt to improve security and make sure user's passwords were not stored as plaintext). 
+                    Authenticated user documents were stored in our database as a <b>username</b>, <b>email address</b>, <b>user ID</b> and <b>hash</b> (which was the password stored as a SHA1 hash with salt to improve security and make sure user's passwords were not stored as plaintext). To verify a users password we simply hash the potential password with the same hashing process and check against that users hash value in the database. We integrated Passport.js to handle the authenticate requests.
                 </p>
                  <p>
                     To improve security, every time a new password was created (either changed by user, or in the instance of a new admin account being created) a new salt was used, 8 characters long and created randomly.
@@ -313,7 +314,7 @@
                  <p>To create an HTTPS server, needed to produce an SSL certificate. To do this we used openssl with the <em>genrsa</em> command to produce a key, they used this key to produce a certificate. We then sent the key and the certificate to the <em>https.createServer</em> node module, which created our https server.
 
             </p>
-             <p>Our site will only work over https, and this with a combination of the cookie being set to httpOnly means that our cookies cannot be read locally via JavaScript, a big potential security spot. Our cookie is also set to secure, which means that the cookie can no longer be sent with a request that isn’t made over the HTTPS scheme, which further makes our site more secure.
+             <p>Our site will only work over https, and this with a combination of the cookie being set to httpOnly means that our cookies cannot be read locally via JavaScript, a big potential security spot. Our cookie is also set to secure, which means that the cookie can no longer be sent with a request that isn’t made over the HTTPS scheme, which further makes our site more secure. If anyone tries to access our site via http, it redirects them to https.
             </p>
                  <p>YouTube embed support was affected by using https, forcing us to discover and consult the <a href="http://apiblog.youtube.com/2011/02/https-support-for-youtube-embeds.html">YouTube API Blog</a> to fix this error (our links were hardcoded as http://... instead of https://...)</p>
             </div>

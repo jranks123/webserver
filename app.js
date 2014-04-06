@@ -53,15 +53,17 @@ app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
 
-var server = https.createServer(options, app).listen(port, function(){
-  console.log("Express server listening on port " + port);
-});
+
+
+
+
 
 
 function requireHTTPS(req, res, next) {
     if (!req.secure) {
         //FYI this should work for local development as well
-        return res.redirect('https://' + req.get('host') + req.url);
+        var redirectURL = 'https://' + req.get('host') + req.url;
+        return res.redirect(redirectURL.replace("8000", "3000"));
     }
     next();
 }
@@ -275,34 +277,27 @@ app.post('/changePass', ensureAuthenticated, function(req, res){
 
 	console.log(req.user.hash);
 	if (verifyHash(req.body.currentPassword, req.user.hash)){
-		if(req.body.newPassword == req.body.confPassword && req.body.newPassword > 8 ){
+		if(req.body.newPassword == req.body.confPassword){
 			  users.findOneAndUpdate({_id:req.user._id}, { $set: { hash: generateHash(req.body.newPassword)}}, {upsert:true},  function(err, person) {
 				  if (err) {
-				    res.redirect('admin_panel#/failPassword');
+				    console.log('got an error');
 				  }else{
-				  		res.redirect('admin_panel#/account');
 				  }
 
 			});
 		}else{
-			res.redirect('admin_panel#/failPassword');
+			console.log("Please check that new password and confirm password are the same");
 		}
 
 	}else{
-		res.redirect('admin_panel#/failPassword');
+		console.log("incorrect password");
 	}
+	res.redirect('admin_panel#/account')
 	});
 
 
 app.post('/createUser', ensureAuthenticated, function(req, res){
-	req.assert('newPass', 'Please enter a location').len(8);
-	req.assert('confPass', 'Please enter the venue').len(8);
-	req.assert('newEmail', 'Please include valid ticket link').notEmpty();
-	req.assert('newUsername', 'Please include valid ticket link').notEmpty();
-	var errors = req.validationErrors();
-
-
-	if((req.body.newPass == req.body.confPass) && (!errors)){
+	if(req.body.newPass == req.body.confPass){
 		hashNew = generateHash(req.body.newPass);
 		new users({
 			username: req.body.newUsername,
@@ -312,7 +307,8 @@ app.post('/createUser', ensureAuthenticated, function(req, res){
 			    res.redirect( 'admin_panel#/account' );
 			  });
 	}else{
-		res.redirect('admin_panel#/failAddUser');
+		console.log("Passwords not the same");
+		res.redirect( 'admin_panel#/account' );
 	}
 });
 
@@ -600,11 +596,13 @@ app.post('/saveVideo', function(req, res) {
     
 
 
-
-
- /*
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+var server = https.createServer(options, app).listen(port, function(){
+  console.log("https express server listening on port " + port + ". Enter the site via https at https://localhost:3000");
 });
-*/
+
+
+ 
+
+http.createServer(app).listen(8000, function(){
+  console.log('http express server listening on port 8000 . Enter the site via http at localhost:8000');
+});
