@@ -4,7 +4,7 @@
 		<p>Edit Band Biography</p>
 
 		<form name="aboutpage" action="/UpdateBio" method="POST">
-			<textarea cols="100" rows="20" name="bio"><% bio.forEach( function( paragraphs ){ %><%=paragraphs.bio%><% 
+			<textarea cols="100" rows="20" name="bio"><% bio.forEach( function( paragraphs ){ %><%=paragraphs.bio%><%=newLine%><% 
 	}); %></textarea>
 			<br />
 			<p><input type="submit" value="Save" class="button"></p>

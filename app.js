@@ -443,6 +443,7 @@ app.get('/content/:name', ensureAuthenticated, function (req, res){
 		bios.find({}, function(err, bio){
 	  	res.render('content/' + name, {
 	  		bio : bio,
+	  		newLine : '\n',
 	  	});
 	  });
 	}
@@ -452,7 +453,7 @@ app.get('/content/:name', ensureAuthenticated, function (req, res){
     			sort( {date: 1} ).
     				exec( function ( err, tour){
 						res.render('content/'+name,{
-						tour : tour
+						tour : tour,
 						});
 				});
 	}
