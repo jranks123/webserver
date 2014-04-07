@@ -8,7 +8,7 @@ function requireHTTPS(req, res, next) {
 
 var express = require('express');
 var flash = require('connect-flash'); 
-var app = module.exports = express();
+var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var https = require('https');
@@ -27,6 +27,7 @@ var options = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem')
 };
+var app = express();
 var port = process.env.PORT || 3000;
 app.engine('.html', require('ejs').renderFile);
 
@@ -82,7 +83,7 @@ http.createServer(app).listen(8000, function(){
 
 //INITIALISE DATABASE
 var db = mongoose.connection;
-var dbIsOpen = module.exports.open = false;
+var dbIsOpen = false;
 var youtubevids;
 var youtubeVidSchema ;
 var tourdates;
@@ -93,7 +94,7 @@ var biosSchema;
 var bios;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
-  	dbIsOpen = module.exports.open = true;
+  	dbIsOpen = true;
 
 	 youtubeVidSchema = new mongoose.Schema({
 	  name : String,
@@ -273,10 +274,8 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-var routes = require('./routes');
-app.get('/', routes.index);
 //main website
-/*app.get('/', function (req, res){
+app.get('/', function (req, res){
 
 	if(!dbIsOpen){		
 		console.log("db not open" );
@@ -316,7 +315,7 @@ app.get('/', routes.index);
 			});
 		});
 	});
-});*/
+});
 
 app.get('/admin', function (req, res){
 			res.render('admin_index', {
@@ -665,7 +664,3 @@ app.post('/initialiseDatabase', function(req,res){
 
 	});
 
-exports.db = db;
-exports.bios = bios;
-exports.youtubevids = youtubevids;
-exports.tourdates = tourdates;

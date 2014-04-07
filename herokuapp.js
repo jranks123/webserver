@@ -1,14 +1,17 @@
 function requireHTTPS(req, res, next) {
     if (!req.secure) {
+        //FYI this should work for local development as well
         var redirectURL = 'https://' + req.get('host') + req.url;
         return res.redirect(redirectURL.replace("8000", "3000"));
     }
     next();
 }
 
+
+
 var express = require('express');
 var flash = require('connect-flash'); 
-var app = module.exports = express();
+var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var https = require('https');
@@ -22,15 +25,20 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require ('passport-local').Strategy;
 var expressValidator = require('express-validator');
-mongoose.connect('mongodb://localhost/arcadeDB');
+var uristring =
+process.env.MONGOLAB_URI ||
+process.env.MONGOHQ_URL ||
+'mongodb://localhost/arcadeDB';
+mongoose.connect(uristring);
 var options = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem')
 };
+var app = express();
 var port = process.env.PORT || 3000;
 app.engine('.html', require('ejs').renderFile);
 
-//environments
+// all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'html');
@@ -40,6 +48,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
@@ -72,7 +81,7 @@ app.configure('development', function(){
 
 //SET UP SERVERS
 var server = https.createServer(options, app).listen(port, function(){
-  console.log("https express server listening on port " + port + ". Enter the site via https at https://localhost:" + port);
+  console.log("https express server listening on port " + port + ". Enter the site via https at https://localhost:3000");
 });
 
 http.createServer(app).listen(8000, function(){
@@ -80,9 +89,12 @@ http.createServer(app).listen(8000, function(){
 });
 
 
+
+
 //INITIALISE DATABASE
+
 var db = mongoose.connection;
-var dbIsOpen = module.exports.open = false;
+var dbIsOpen = false;
 var youtubevids;
 var youtubeVidSchema ;
 var tourdates;
@@ -93,7 +105,7 @@ var biosSchema;
 var bios;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
-  	dbIsOpen = module.exports.open = true;
+  	dbIsOpen = true;
 
 	 youtubeVidSchema = new mongoose.Schema({
 	  name : String,
@@ -123,6 +135,10 @@ db.once('open', function callback () {
 	users = mongoose.model('users', userSchema);
 	tourdates = mongoose.model('tourdates', tourdatesschema);
 	bios= mongoose.model('bios', biosSchema);
+
+	//lower case?
+
+
 });
 
 
@@ -132,12 +148,14 @@ db.once('open', function callback () {
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
+
 passport.deserializeUser(function(id, done) {
             users.findById(id, function(err,user){        
                 if(err){done(err);}
                 	done(null,user);
             });
 });
+
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
@@ -150,6 +168,8 @@ app.post('/login',
                                    failureFlash: true })
 );
 
+
+
 function generateFinalHash(algorithm, salt, password, numberOfIterations){
 	try {
 	    var hash = password;
@@ -160,6 +180,7 @@ function generateFinalHash(algorithm, salt, password, numberOfIterations){
 	  } catch (e) {
 	    throw new Error('Invalid message digest');
 	  }
+
 }
 
 function generateHash(password){
@@ -171,6 +192,9 @@ function generateHash(password){
 	var salt = crypto.randomBytes(Math.ceil(saltLength / 2)).toString('hex').substring(0, saltLength);
 	return(generateFinalHash(algorithm, salt, password, numberOfIterations))
 }
+
+
+
 
 function verifyHash(password, hash){
 
@@ -185,6 +209,7 @@ function verifyHash(password, hash){
 		return false;
 	}
 }
+
 
 passport.use(new LocalStrategy(function(username, password, done) {
     users.findOne({ username: username }, function(err, user) {
@@ -213,7 +238,11 @@ passport.use(new LocalStrategy(function(username, password, done) {
   }
 ));
 
-//login and pw forms
+
+
+
+//LOGIN AND PASSWORD FORMS
+
 app.post('/login',
   passport.authenticate('local', {
     successRedirect: '/admin_panel',
@@ -221,6 +250,7 @@ app.post('/login',
      failureFlash: true
   })
 );
+
 
 app.post('/changePass', ensureAuthenticated, function(req, res){
 
@@ -240,6 +270,7 @@ app.post('/changePass', ensureAuthenticated, function(req, res){
 		res.redirect('admin_panel#/failPassword');
 	}
 	});
+
 
 app.post('/createUser', ensureAuthenticated, function(req, res){
 	req.assert('newPass', 'Please enter a location').len(8);
@@ -268,15 +299,17 @@ app.post('/createUser', ensureAuthenticated, function(req, res){
 		});
 });
 
+
+
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-var routes = require('./routes');
-app.get('/', routes.index);
-//main website
-/*app.get('/', function (req, res){
+
+
+//MAIN SITE PAGE
+app.get('/', function (req, res){
 
 	if(!dbIsOpen){		
 		console.log("db not open" );
@@ -316,7 +349,7 @@ app.get('/', routes.index);
 			});
 		});
 	});
-});*/
+});
 
 app.get('/admin', function (req, res){
 			res.render('admin_index', {
@@ -342,25 +375,31 @@ app.get('/admin_panel', ensureAuthenticated, function (req, res){
 		});
 });
 
-//reset password routing
+
+
+//THE RESET PASSWORD SCREEN
 app.post('/admin_reset', function(req,res){
 	res.redirect('admin_panel');
 });
 
 
-//logout of admin function and routing
+//TO LOG OUT OF ADMIN
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/admin_panel');
 });
 
-//angular routing within admin panel 
+
+
+//FOR VIEWING ANGULAR PAGES
 app.get('/content/:name', ensureAuthenticated, function (req, res){
+
 
 	if(!dbIsOpen){		
 		console.log("db not open" );
 		return;
 	}
+
 
 	var name = req.params.name;
 
@@ -395,21 +434,26 @@ app.get('/content/:name', ensureAuthenticated, function (req, res){
 		res.render('content/'+name,{	
 		});
 	}
+
+
 });
 
-//post new bio to database
+
+
+//UPDATE THE BIO
 app.post('/UpdateBio', function(req, res){
-	var unvalidParagraphs = req.body.bio.replace(/\t|\r|/g, '').split('\n');
-	var paragraphs = [];
-	var i;
-	for(i = 0; i < unvalidParagraphs.length; i++){
+	  var unvalidParagraphs = req.body.bio.replace(/\t|\r|/g, '').split('\n');
+	  var paragraphs = [];
+	  	 var i;
+	  for(i = 0; i < unvalidParagraphs.length; i++){
 	  	if (unvalidParagraphs[i].replace(/(\r\n|\n|\r)/gm,'').replace(/ /g,'') != ''){
 	  		paragraphs.push(unvalidParagraphs[i]);
 	  	}
-	}
+	  }
 
-	bios.remove({}, function () { }); 
-	for(i = 0; i < paragraphs.length; i ++){
+
+	  bios.remove({}, function () { }); 
+	  for(i = 0; i < paragraphs.length; i ++){
 	  	 new bios({
 	  	 	bio : paragraphs[i],
 	  	 	name : "p"
@@ -417,16 +461,19 @@ app.post('/UpdateBio', function(req, res){
 		    
 		  });
 
-	}
-	res.redirect( 'admin_panel#/about' );
-});
+		}
+		res.redirect( 'admin_panel#/about' );
+	});
 
-//add new tourdate to database
+
+
+//ADD A NEW DATE
 app.post('/addNewDate', function(req, res) {
 	req.assert('location', 'Please enter a location').notEmpty();
 	req.assert('venue', 'Please enter the venue').notEmpty();
 	req.assert('tickets', 'Please include valid ticket link').notEmpty();
 	var errors = req.validationErrors();
+
 
 	function urlChecker(url){
 		var regexp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
@@ -461,7 +508,7 @@ app.post('/addNewDate', function(req, res) {
 });
 
 
-//delete specified tourdate
+//DELETE A DATE
 app.get( '/deleteDate/:id', function ( req, res ){
   	tourdates.findById( req.params.id, function ( err, dates ){
     dates.remove( function ( err, dates ){
@@ -470,15 +517,14 @@ app.get( '/deleteDate/:id', function ( req, res ){
   });
 });
 
-//save new youtube videos arrangement
+
+
 app.post('/saveVideo', function(req, res) {
-	//make sure all youtube IDs are of valid length
 	req.assert('left', 'Featured video must be 11 char code').len(10,12);
 	req.assert('middle', 'Featured video must be 11 char code').len(10,12);
 	req.assert('right', 'Featured video must be 11 char code').len(10,12);
 	var errors = req.validationErrors();
 
-	//make sure ID is alphanumeric
 	function IDCheck(id){
 		var alphanum = /((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;
 		if(!alphanum.test(id)){
@@ -499,19 +545,22 @@ app.post('/saveVideo', function(req, res) {
 	  if (err) {
 	    console.log('got an error');
 	  }else{
+	  	
+
 	  youtubevids.findOneAndUpdate({name:"vid2"}, { $set: { url: req.body.middle }}, {upsert:true},  function(err, person) {
 	  if (err) {
 	    console.log('got an error');
-	  }else{	
+	  }else{
+	  	
   		  youtubevids.findOneAndUpdate({name:"vid3"}, { $set: { url: req.body.right }}, {upsert:true},  function(err, person) {
 		  if (err) {
 		    console.log('got an error');
 		  }else{
   			res.redirect('admin_panel#/video')	  	
-	  	  }
-     	});	  	
 	  }
-      });
+     });	  	
+	  }
+     });
 	  }
      });
 	} else{
@@ -519,10 +568,14 @@ app.post('/saveVideo', function(req, res) {
 	}
 });
 
-//initialize blank database for demo install purposes
-app.get('/demo', function(req, res){
 
-	//remove all data from database
+
+
+
+
+//INITIALISE DATABASE
+
+app.get('/demo', function(req, res){
 	users.remove({}, function(err) { 
 	  console.log('collection removed') 
 	});
@@ -539,15 +592,13 @@ app.get('/demo', function(req, res){
 	youtubevids.remove({}, function(err) { 
 	   console.log('collection removed') 
 	});
-
-	//render the install page
 	res.render('demo', {
 	});
 });
 
-//add default data for demo install purposes
+
+
 app.post('/initialiseDatabase', function(req,res){
-	//
 	var biosIan1 = new bios();
 	var biosIan2 = new bios();
 	var biosIan3 = new bios();
@@ -665,7 +716,3 @@ app.post('/initialiseDatabase', function(req,res){
 
 	});
 
-exports.db = db;
-exports.bios = bios;
-exports.youtubevids = youtubevids;
-exports.tourdates = tourdates;
