@@ -1,13 +1,10 @@
 function requireHTTPS(req, res, next) {
     if (!req.secure) {
-        //FYI this should work for local development as well
         var redirectURL = 'https://' + req.get('host') + req.url;
         return res.redirect(redirectURL.replace("8000", "3000"));
     }
     next();
 }
-
-
 
 var express = require('express');
 var flash = require('connect-flash'); 
@@ -34,7 +31,7 @@ var app = express();
 var port = process.env.PORT || 3000;
 app.engine('.html', require('ejs').renderFile);
 
-// all environments
+//environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'html');
@@ -44,7 +41,6 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
@@ -77,7 +73,7 @@ app.configure('development', function(){
 
 //SET UP SERVERS
 var server = https.createServer(options, app).listen(port, function(){
-  console.log("https express server listening on port " + port + ". Enter the site via https at https://localhost:3000");
+  console.log("https express server listening on port " + port + ". Enter the site via https at https://localhost:" + port);
 });
 
 http.createServer(app).listen(8000, function(){
@@ -85,10 +81,7 @@ http.createServer(app).listen(8000, function(){
 });
 
 
-
-
 //INITIALISE DATABASE
-
 var db = mongoose.connection;
 var dbIsOpen = false;
 var youtubevids;
@@ -131,10 +124,6 @@ db.once('open', function callback () {
 	users = mongoose.model('users', userSchema);
 	tourdates = mongoose.model('tourdates', tourdatesschema);
 	bios= mongoose.model('bios', biosSchema);
-
-	//lower case?
-
-
 });
 
 
@@ -144,14 +133,12 @@ db.once('open', function callback () {
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
-
 passport.deserializeUser(function(id, done) {
             users.findById(id, function(err,user){        
                 if(err){done(err);}
                 	done(null,user);
             });
 });
-
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
@@ -164,8 +151,6 @@ app.post('/login',
                                    failureFlash: true })
 );
 
-
-
 function generateFinalHash(algorithm, salt, password, numberOfIterations){
 	try {
 	    var hash = password;
@@ -176,7 +161,6 @@ function generateFinalHash(algorithm, salt, password, numberOfIterations){
 	  } catch (e) {
 	    throw new Error('Invalid message digest');
 	  }
-
 }
 
 function generateHash(password){
@@ -188,9 +172,6 @@ function generateHash(password){
 	var salt = crypto.randomBytes(Math.ceil(saltLength / 2)).toString('hex').substring(0, saltLength);
 	return(generateFinalHash(algorithm, salt, password, numberOfIterations))
 }
-
-
-
 
 function verifyHash(password, hash){
 
@@ -205,7 +186,6 @@ function verifyHash(password, hash){
 		return false;
 	}
 }
-
 
 passport.use(new LocalStrategy(function(username, password, done) {
     users.findOne({ username: username }, function(err, user) {
@@ -234,11 +214,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
   }
 ));
 
-
-
-
-//LOGIN AND PASSWORD FORMS
-
+//login and pw forms
 app.post('/login',
   passport.authenticate('local', {
     successRedirect: '/admin_panel',
@@ -246,7 +222,6 @@ app.post('/login',
      failureFlash: true
   })
 );
-
 
 app.post('/changePass', ensureAuthenticated, function(req, res){
 
@@ -266,7 +241,6 @@ app.post('/changePass', ensureAuthenticated, function(req, res){
 		res.redirect('admin_panel#/failPassword');
 	}
 	});
-
 
 app.post('/createUser', ensureAuthenticated, function(req, res){
 	req.assert('newPass', 'Please enter a location').len(8);
@@ -295,18 +269,13 @@ app.post('/createUser', ensureAuthenticated, function(req, res){
 		});
 });
 
-
-
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-
-
-//MAIN SITE PAGE
+//main website
 app.get('/', function (req, res){
-
 
 	if(!dbIsOpen){		
 		console.log("db not open" );
@@ -372,31 +341,25 @@ app.get('/admin_panel', ensureAuthenticated, function (req, res){
 		});
 });
 
-
-
-//THE RESET PASSWORD SCREEN
+//reset password routing
 app.post('/admin_reset', function(req,res){
 	res.redirect('admin_panel');
 });
 
 
-//TO LOG OUT OF ADMIN
+//logout of admin function and routing
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/admin_panel');
 });
 
-
-
-//FOR VIEWING ANGULAR PAGES
+//angular routing within admin panel 
 app.get('/content/:name', ensureAuthenticated, function (req, res){
-
 
 	if(!dbIsOpen){		
 		console.log("db not open" );
 		return;
 	}
-
 
 	var name = req.params.name;
 
@@ -431,26 +394,21 @@ app.get('/content/:name', ensureAuthenticated, function (req, res){
 		res.render('content/'+name,{	
 		});
 	}
-
-
 });
 
-
-
-//UPDATE THE BIO
+//post new bio to database
 app.post('/UpdateBio', function(req, res){
-	  var unvalidParagraphs = req.body.bio.replace(/\t|\r|/g, '').split('\n');
-	  var paragraphs = [];
-	  	 var i;
-	  for(i = 0; i < unvalidParagraphs.length; i++){
+	var unvalidParagraphs = req.body.bio.replace(/\t|\r|/g, '').split('\n');
+	var paragraphs = [];
+	var i;
+	for(i = 0; i < unvalidParagraphs.length; i++){
 	  	if (unvalidParagraphs[i].replace(/(\r\n|\n|\r)/gm,'').replace(/ /g,'') != ''){
 	  		paragraphs.push(unvalidParagraphs[i]);
 	  	}
-	  }
+	}
 
-
-	  bios.remove({}, function () { }); 
-	  for(i = 0; i < paragraphs.length; i ++){
+	bios.remove({}, function () { }); 
+	for(i = 0; i < paragraphs.length; i ++){
 	  	 new bios({
 	  	 	bio : paragraphs[i],
 	  	 	name : "p"
@@ -458,19 +416,16 @@ app.post('/UpdateBio', function(req, res){
 		    
 		  });
 
-		}
-		res.redirect( 'admin_panel#/about' );
-	});
+	}
+	res.redirect( 'admin_panel#/about' );
+});
 
-
-
-//ADD A NEW DATE
+//add new tourdate to database
 app.post('/addNewDate', function(req, res) {
 	req.assert('location', 'Please enter a location').notEmpty();
 	req.assert('venue', 'Please enter the venue').notEmpty();
 	req.assert('tickets', 'Please include valid ticket link').notEmpty();
 	var errors = req.validationErrors();
-
 
 	function urlChecker(url){
 		var regexp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
@@ -505,7 +460,7 @@ app.post('/addNewDate', function(req, res) {
 });
 
 
-//DELETE A DATE
+//delete specified tourdate
 app.get( '/deleteDate/:id', function ( req, res ){
   	tourdates.findById( req.params.id, function ( err, dates ){
     dates.remove( function ( err, dates ){
@@ -514,8 +469,7 @@ app.get( '/deleteDate/:id', function ( req, res ){
   });
 });
 
-
-
+//save new youtube videos arrangement
 app.post('/saveVideo', function(req, res) {
 	req.assert('left', 'Featured video must be 11 char code').len(10,12);
 	req.assert('middle', 'Featured video must be 11 char code').len(10,12);
