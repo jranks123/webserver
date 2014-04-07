@@ -92,6 +92,11 @@
 				controller  : 'themesController'
 			})
 
+			.when('/failUsernameDupe', {
+				templateUrl : 'content/failduplicate.html',
+				controller  : 'themesController'
+			})
+
 			.when('/account', {
 				templateUrl : 'content/user.html',
 				controller  : 'userController'

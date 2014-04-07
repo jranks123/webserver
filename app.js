@@ -298,19 +298,25 @@ app.post('/createUser', ensureAuthenticated, function(req, res){
 	req.assert('newEmail', 'Please include valid ticket link').notEmpty();
 	req.assert('newUsername', 'Please include valid ticket link').notEmpty();
 	var errors = req.validationErrors();
+	users.count({username : req.body.newUsername}, function(req1, res1){
 
-	if((req.body.newPass == req.body.confPass) && (!errors)){
-		hashNew = generateHash(req.body.newPass);
-		new users({
-			username: req.body.newUsername,
-			hash 	 : hashNew,
-			email : req.body.newEmail
-			  }).save( function( err, tour, count ){
-			    res.redirect( 'admin_panel#/account' );
-			  });
-	}else{
-		res.redirect('admin_panel#/failAddUser');
-	}
+		if(res1 > 0){
+			console.log('res1 = '+res1);
+			 res.redirect( 'admin_panel#/failUsernameDupe' );
+		}
+		else if((req.body.newPass == req.body.confPass) && (!errors)){
+			hashNew = generateHash(req.body.newPass);
+			new users({
+				username: req.body.newUsername,
+				hash 	 : hashNew,
+				email : req.body.newEmail
+				  }).save( function( err, tour, count ){
+				    res.redirect( 'admin_panel#/account' );
+				  });
+		}else{
+			res.redirect('admin_panel#/failAddUser');
+		}
+		});
 });
 
 
