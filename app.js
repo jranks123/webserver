@@ -1,10 +1,16 @@
-/**
- * Module dependencies.
- */
+function requireHTTPS(req, res, next) {
+    if (!req.secure) {
+        //FYI this should work for local development as well
+        var redirectURL = 'https://' + req.get('host') + req.url;
+        return res.redirect(redirectURL.replace("8000", "3000"));
+    }
+    next();
+}
+
 
 
 var express = require('express');
- var flash = require('connect-flash'); 
+var flash = require('connect-flash'); 
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
@@ -24,18 +30,8 @@ var options = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem')
 };
-
 var app = express();
-
-var port = 3000;
-
-
-
-/*https.createServer(options, function (req, res) {
-  res.writeHead(200);
-  res.end("hello world\n");
-}).listen(8000);*/
-
+var port = process.env.PORT || 3000;
 app.engine('.html', require('ejs').renderFile);
 
 // all environments
@@ -52,21 +48,46 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
+app.configure(function(){
+app.use(flash());
+app.set('views', __dirname + '/views');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.bodyParser());
+app.use(helmet.xframe());
+app.use(helmet.iexss());
+app.use(helmet.contentTypeOptions());
+app.use(helmet.cacheControl());
+app.use(expressValidator());
+app.use(express.methodOverride());
+app.use(express.cookieParser('secret'));
+app.use(express.session({ cookie: {httpOnly:true, secure:true,  maxAge: 5*60*1000 } }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(requireHTTPS);
+app.use(app.router);
+
+});
+
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
+
+
+//SET UP SERVERS
+var server = https.createServer(options, app).listen(port, function(){
+  console.log("https express server listening on port " + port + ". Enter the site via https at https://localhost:3000");
+});
+
+http.createServer(app).listen(8000, function(){
+  console.log('http express server listening on port 8000 . Enter the site via http at localhost:8000');
+});
 
 
 
 
-
-
-
-function requireHTTPS(req, res, next) {
-    if (!req.secure) {
-        //FYI this should work for local development as well
-        var redirectURL = 'https://' + req.get('host') + req.url;
-        return res.redirect(redirectURL.replace("8000", "3000"));
-    }
-    next();
-}
+//INITIALISE DATABASE
 
 var db = mongoose.connection;
 var dbIsOpen = false;
@@ -119,41 +140,7 @@ db.once('open', function callback () {
 
 
 
-
-
-app.configure(function(){
-  app.use(flash());
-  app.set('views', __dirname + '/views');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(helmet.xframe());
-  app.use(helmet.iexss());
-  app.use(helmet.contentTypeOptions());
-  app.use(helmet.cacheControl());
-  app.use(expressValidator());
-  app.use(express.methodOverride());
-  app.use(express.cookieParser('secret'));
-  app.use(express.session({ cookie: {httpOnly:true, secure:true,  maxAge: 5*60*1000 } }));
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.use(passport.initialize());
-  app.use(passport.session());
-  app.use(requireHTTPS);
-  /*app.use(express.csrf());
-  app.use(function (req, res, next) {
-  	res.locals.csrftoken = req.session._csrf;
-    next();
-  });*/
-   app.use(app.router);
-
-});
-
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
-
-
-
+//AUTHENTICATION
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
@@ -194,13 +181,6 @@ function generateFinalHash(algorithm, salt, password, numberOfIterations){
 
 function generateHash(password){
 
-	if(typeof password != 'string' ){
-		//validation
-	}
-	if(password.lenght < 7){
-		//validation
-	}
-
 	//generate salt of length 8
 	var saltLength = 8;
 	var algorithm = 'sha1';
@@ -219,11 +199,6 @@ function verifyHash(password, hash){
 		hashParts.splice(2, 0, 1);
 		hash = hashParts.join("$");
 	}
-
-
-
-
-
 	if(hash == generateFinalHash(hashParts[0], hashParts[1], password, hashParts[2])){
 		return true;
 	}else{
@@ -242,9 +217,6 @@ passport.use(new LocalStrategy(function(username, password, done) {
         return done(null, false, { message: 'Incorrect Login Details' });
       }
 
-
-
-
 	if (verifyHash(password, user.hash)) 
     {
     	console.log("correct pass")
@@ -253,7 +225,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
     else
     {
     	console.log("Incorrect")
-        return done(null, false, { message: 'Incorrect password.' });
+        return done(null, false, { message: 'Incorrect Login Details' });
 	}
 
 
@@ -262,6 +234,10 @@ passport.use(new LocalStrategy(function(username, password, done) {
   }
 ));
 
+
+
+
+//LOGIN AND PASSWORD FORMS
 
 app.post('/login',
   passport.authenticate('local', {
@@ -326,23 +302,9 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-var findCallback = function(err, data)
-{
-	if (err)
-	{
-		console.log("found error " + err);
-		return;
-	}
-	else
-	{
-		//getScreen(;
-		return data.url;
-	}
-}
 
 
-
-
+//MAIN SITE PAGE
 app.get('/', function (req, res){
 
 
@@ -351,23 +313,15 @@ app.get('/', function (req, res){
 		return;
 	}
 
-	function getScreen( url, size )
+	function getScreen( url )
 	{
 	  if(url === null){ return ""; }
-
-	  size = (size === null) ? "big" : size;
 	  var vid;
 	  var results;
-
 	  results = url.match("[\\?&]v=([^&#]*)");
-
 	  vid = ( results === null ) ? url : results[1];
-
-	  if(size == "small"){
-	    return "http://img.youtube.com/vi/"+vid+"/2.jpg";
-	  }else {
-	    return "http://img.youtube.com/vi/"+vid+"/0.jpg";
-	  }
+	   return "http://img.youtube.com/vi/"+vid+"/0.jpg";
+	  
 	}
 
 	bios.find({}, function(bierr, bio){
@@ -399,12 +353,13 @@ app.get('/admin', function (req, res){
 		});
 	});
 
-app.get('/admin_reset', function (req, res){
+app.get('/admin_reset',  ensureAuthenticated, function (req, res){
 			res.render('admin_reset', {
 		});
 	});
 
 
+//
 app.get('/admin_panel', ensureAuthenticated, function (req, res){
 
 
@@ -419,12 +374,21 @@ app.get('/admin_panel', ensureAuthenticated, function (req, res){
 
 
 
+//THE RESET PASSWORD SCREEN
+app.post('/admin_reset', function(req,res){
+	res.redirect('admin_panel');
+});
+
+
+//TO LOG OUT OF ADMIN
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/admin_panel');
 });
 
 
+
+//FOR VIEWING ANGULAR PAGES
 app.get('/content/:name', ensureAuthenticated, function (req, res){
 
 
@@ -472,6 +436,8 @@ app.get('/content/:name', ensureAuthenticated, function (req, res){
 });
 
 
+
+//UPDATE THE BIO
 app.post('/UpdateBio', function(req, res){
 	  var unvalidParagraphs = req.body.bio.replace(/\t|\r|/g, '').split('\n');
 	  var paragraphs = [];
@@ -497,6 +463,8 @@ app.post('/UpdateBio', function(req, res){
 	});
 
 
+
+//ADD A NEW DATE
 app.post('/addNewDate', function(req, res) {
 	req.assert('location', 'Please enter a location').notEmpty();
 	req.assert('venue', 'Please enter the venue').notEmpty();
@@ -537,7 +505,7 @@ app.post('/addNewDate', function(req, res) {
 });
 
 
-
+//DELETE A DATE
 app.get( '/deleteDate/:id', function ( req, res ){
   	tourdates.findById( req.params.id, function ( err, dates ){
     dates.remove( function ( err, dates ){
@@ -601,16 +569,147 @@ app.post('/saveVideo', function(req, res) {
 
 
 
-    
+
+//INITIALISE DATABASE
+
+app.get('/demo', function(req, res){
+	users.remove({}, function(err) { 
+	  console.log('collection removed') 
+	});
+
+	tourdates.remove({}, function(err) { 
+	  console.log('collection removed') 
+	});
 
 
-var server = https.createServer(options, app).listen(port, function(){
-  console.log("https express server listening on port " + port + ". Enter the site via https at https://localhost:3000");
+	bios.remove({}, function(err) { 
+	   console.log('collection removed') 
+	});
+
+	youtubevids.remove({}, function(err) { 
+	   console.log('collection removed') 
+	});
+	res.render('demo', {
+	});
 });
 
 
- 
 
-http.createServer(app).listen(8000, function(){
-  console.log('http express server listening on port 8000 . Enter the site via http at localhost:8000');
-});
+app.post('/initialiseDatabase', function(req,res){
+	var biosIan1 = new bios();
+	var biosIan2 = new bios();
+	var biosIan3 = new bios();
+	biosIan1.bio = "Arcade Fire is an indie rock band based in Montreal, Quebec, Canada, consisting of husband and wife Win Butler and Régine Chassagne, along with Win's brother Will Butler, Richard Reed Parry, Tim Kingsbury and Jeremy Gara. The band's current touring line-up also includes former core member Sarah Neufeld, frequent collaborator Owen Pallett, and two additional percussionists, Diol Edmond and Tiwill Duprate";
+	biosIan2.bio = "Founded in 2001 by friends and classmates Win Butler and Josh Deu, the band came to prominence in 2004 with the release of their critically acclaimed debut album Funeral, and has won numerous awards, including the 2011 Grammy for Album of the Year (they hold the distinction of being the only musical group to have won their first and only Grammy in that category), the 2011 Juno Award for Album of the Year, and the 2011 Brit Award for Best International Album for their third studio album, The Suburbs, released in 2010 to critical acclaim and commercial success.";	
+	biosIan3.bio = "In earlier years, they won the 2008 Meteor Music Award for Best International Album and the 2008 Juno Award for Alternative Album of the Year for their second studio album, Neon Bible. They also received nominations for the Best Alternative Music Album Grammy for all three of their studio albums. The band's work has also been twice named as a short list nominee for the Polaris Music Prize in 2007 for Neon Bible and in 2011 for The Suburbs, winning the award for The Suburbs. In 2013, Arcade Fire released their fourth album Reflektor and scored the feature film Her, for which William Butler (current member of the band) and Owen Pallett were nominated for Best Original Score at the 86th Academy Awards";
+
+	biosIan1.save(function(err, save){
+		if(err){
+			throw err;
+			console.log(err);
+		}else{
+			biosIan2.save(function(err, save){
+			if(err){
+				throw err;
+				console.log(err);
+			}else{
+				biosIan3.save(function(err, save){
+				if(err){
+					throw err;
+					console.log(err);
+				}else{
+					var userIan = new users();
+					userIan.username = req.body.username;
+					userIan.hash = generateHash(req.body.password);
+					userIan.save(function(err, save){
+					if(err){
+						throw err;
+						console.log(err);
+						res.redirect('/demo');
+					}else{
+								 
+						 var vid1 = new youtubevids();
+						 vid1.name = "vid1";
+						 vid1.url = "8dqEJSTLOQM";
+						 var vid2 = new youtubevids();
+						 vid2.name ="vid2";
+						 vid2.url = "T4JrQpzno5Y";
+						 var vid3 = new youtubevids();
+						 vid3.name = "vid3";
+						 vid3.url = "EcKinnMXuKg";
+
+						  vid1.save(function(err, person) {
+							  if (err) {
+							    console.log('got an error');
+							  }else{
+							  		vid2.save(function(err, person) {
+								  	if (err) {
+								    console.log('got an error');
+							  		}else{
+										vid3.save(function(err, person) {	
+											if (err) {
+							    				console.log('got an error');
+							 				 }else{
+												var date1 = new tourdates();
+												var date2 = new tourdates();
+												var date3 = new tourdates();
+
+											 	date1.venue = "Glastonbury Music and Arts Festival";
+												date1.location	 = "GLASTONBURY, UK";
+												date1.showDate = "14/03";
+												date1.tickets  = "http://www.glasto.com"
+												date1.date = new Date(2014, 03, 14);
+
+											 	date2.venue = "Rankin's Heritage Festival";
+												date2.location 	 = "BRISTOL, UK";
+												date2.showDate = "15/03";
+												date2.tickets  = "http://www.wordpress.com/paranoidmanboy"
+												date2.date = new Date(2014, 03, 15);
+
+											 	date3.venue = "Koko Music Hall";
+												date3.location 	 = "BERLIN, GERMANY";
+												date3.showDate = "18/04";
+												date3.tickets  = "http://www.glasto.com"
+												date3.date = new Date(2014, 04, 18);
+
+											 	 date1.save(function(err, person) {
+												 	if (err) {
+												    	console.log('got an error');
+												  	}else{
+												  		date2.save(function(err, person) {
+												  		if (err) {
+												    		console.log('got an error');
+												  		}else{
+															date3.save(function(err, person) {	
+																if (err) {
+												    				console.log('got an error');
+												  				}else{
+										  			
+												 					 res.redirect('/admin_panel');
+										  				  	
+													  			}
+												    		 });	  	
+													  }
+												     });
+												  }
+											     });
+
+											  }
+										     });	  	
+									  }
+								     });
+								}
+								});
+
+							}
+							});
+						}
+						});
+					}
+					});
+			}
+			});
+
+
+	});
+

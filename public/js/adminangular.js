@@ -105,16 +105,6 @@
 		//$locationProvider.html5Mode(true);
 	});
 
-	/*adminApp.controller('FormCtrl', function ($scope, $http) {
-		$scope.data = {
-		        vid1: "default",
-		        vid2: "default",
-		        vid3 : "default"
-		    };*/
-
-
-
-
 	adminApp.controller('mainController', function($scope) {
 		$scope.message = 'Home splash';
 	});
