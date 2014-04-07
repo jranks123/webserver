@@ -222,6 +222,10 @@ function verifyHash(password, hash){
 		hash = hashParts.join("$");
 	}
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/httpsfix
 
 
 
@@ -276,27 +280,31 @@ app.post('/login',
 app.post('/changePass', ensureAuthenticated, function(req, res){
 
 	if (verifyHash(req.body.currentPassword, req.user.hash)){
-		if(req.body.newPassword == req.body.confPassword){
+		if((req.body.newPassword == req.body.confPassword) && (req.body.newPassword.length > 8)){
 			  users.findOneAndUpdate({_id:req.user._id}, { $set: { hash: generateHash(req.body.newPassword)}}, {upsert:true},  function(err, person) {
 				  if (err) {
-				    console.log('got an error');
+				    res.redirect('admin_panel#/failPassword');
 				  }else{
+				  	res.redirect('admin_panel#/account');
 				  }
-
 			});
 		}else{
-			console.log("Please check that new password and confirm password are the same");
+			res.redirect('admin_panel#/failPassword');
 		}
-
 	}else{
-		console.log("incorrect password");
+		res.redirect('admin_panel#/failPassword');
 	}
-	res.redirect('admin_panel#/account')
 	});
 
 
 app.post('/createUser', ensureAuthenticated, function(req, res){
-	if(req.body.newPass == req.body.confPass){
+	req.assert('newPass', 'Please enter a location').len(8);
+	req.assert('confPass', 'Please enter the venue').len(8);
+	req.assert('newEmail', 'Please include valid ticket link').notEmpty();
+	req.assert('newUsername', 'Please include valid ticket link').notEmpty();
+	var errors = req.validationErrors();
+
+	if((req.body.newPass == req.body.confPass) && (!errors)){
 		hashNew = generateHash(req.body.newPass);
 		new users({
 			username: req.body.newUsername,
@@ -306,8 +314,7 @@ app.post('/createUser', ensureAuthenticated, function(req, res){
 			    res.redirect( 'admin_panel#/account' );
 			  });
 	}else{
-		console.log("Passwords not the same");
-		res.redirect( 'admin_panel#/account' );
+		res.redirect('admin_panel#/failAddUser');
 	}
 });
 
