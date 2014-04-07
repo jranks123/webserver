@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1><a>Super Top Secret Demo Database Initialise Page</a></h1>
+  </div>
+</header>
+<main role="main">
+  <div class="container">
+      <h3>Choose your username and password for this Demo. Don't forget it!</h3>
+      <div> <form name="login-form" class="login-form" action="/initialiseDatabase" method="post">
+    <input name="username" type="text" class="input username" placeholder="Username" />
+    <div class="user-icon"></div>
+    <input name="password" type="password" class="input password" placeholder="Password" />
+    <div class="pass-icon"></div>   
+    </div>
+
+    <div>
+    <input type="submit" name="submit" value="Login" class="button" />
+    </div>
+  
+  </form></div>
+</div>
+  </main>
+
+
+<footer>
+  <div class="container">
+    <p>On this demo form, to keep things simple, we havn't included validation on the form so feel free to enter a very short username and password if that would be easier to remember!<p>
+  </div>
+</footer>
+
+</body>
+</html>

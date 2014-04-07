@@ -1,0 +1,20 @@
+	<div>
+	<h1>Video</h1>
+		<form action="/saveVideo" method="post" onsubmit="return videoFormChecker();" name="videoForm">
+			<p>Control ArcadeFire.com's featured YouTube videos by adding Youtube IDs below.</p>
+			<br />
+			<p>Default main video ID: <input type="text" name="left" value = "<%= adurl1%>"></p>
+			<p>Default left video ID: <input type="text" name="middle" value = "<%= adurl2%>"></p>
+			<p>Default right video ID: <input type="text" name="right" value = "<%= adurl3%>"></p>
+			<br />
+			<p><input type="submit" value="Save" id="submit" class="button"></p>
+		</form>
+		<br />
+		<p><h1>What is a YouTube ID?</h1></p>
+		<p>To find a YouTube video identifier, please select the alphanumeric code from your video's URL. </p> 
+		<p>It is located after the <em>watch?v=</em> part of the URL. </p><p>In the example below, the video identifier would be: <b>YdXFv4wgrgg</b> </p>
+		<br />
+		<p><img src="img/example_youtube.png" /></p>
+		<br />
+		<p>YouTube identifiers are alphanumeric and between 10 and 12 characters.</p>
+	</div>

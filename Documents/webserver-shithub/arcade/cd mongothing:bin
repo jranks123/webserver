@@ -1,0 +1,3 @@
+cd mongothing/bin
+
+./mongod --dbpath ../../arcade/data

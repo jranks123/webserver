@@ -1,0 +1,77 @@
+img {
+    display: block;
+
+}
+
+body{
+    background-color:white;
+}
+
+.happy{
+
+}
+
+
+.happy img{
+    margin:auto;
+    
+    width:50%;
+    height:50%;
+    
+}
+
+#title{
+   /*position:fixed;*/
+
+   background-color: white;
+}
+
+#title img {
+    height:50%;
+    width:50%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.words{
+    background-color:white;
+    height:50%;
+    width:50%;
+    float:center;
+    clear:both;
+    border:4px solid black;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body{
+    width:100%;
+}
+
+p {
+    text-align: center;
+    font-family: Garamond, serif;
+    font-size: 20px;
+}
+span{
+    color:#6495ED;;
+}
+/*div{
+    height:50px;
+    width:120px;
+    border-color:#6495ED;
+    background-color:#BCD2EE;
+    border-style: solid;
+    border-width: 3px;
+    border-radius:5px;
+    margin:auto;
+    text-align:center;
+}*/
+
+a{
+    text-decoration:none;
+}
+
+/*Start adding your CSS below!*/
+

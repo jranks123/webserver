@@ -1,0 +1,37 @@
+<html ng-app="adminApp">
+<head>
+	<title>Arcade Fire Admin Panel</title>
+	<link rel="stylesheet" type="text/css" href="css/adminpanel.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-route.js"></script>
+</head>
+
+<body ng-controller="mainController">
+	<div id="header">
+		<h1><a href="/admin_panel">Arcade Fire Admin Panel</a></h1>
+	</div>
+	
+	<div id="content">
+		<div id="sidebar">
+			<ul>
+				<li>&#9658; <a href="#about">About</a></li>
+				<li>&#9658; <a href="#video">Video</a></li>
+				<li>&#9658; <a href="#live">Live</a></li>
+				<li>&#9658; <a href="#account">Account Admin</a></li>
+			</ul>
+			<ul>
+				<li>&#9658; <a href="/logout">Sign Out</a></li>
+			</ul>
+		</div>
+		
+		<div id="main-content">
+			<div ng-view></div>
+		</div>
+		
+		<div class="clear"></div>
+	</div>
+
+<script src="js/adminangular.js"></script>
+<script src="js/formvalidation.js"></script>
+</body>
+</html>

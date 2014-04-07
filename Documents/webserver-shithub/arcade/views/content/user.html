@@ -1,0 +1,31 @@
+	<div>
+		<h1>Your account settings</h1>
+
+		<form name="changePassword" action="/changePass" method="POST">
+			Current Password: <input name="currentPassword" type="password" placeholder="Current Password" />	
+			<p>New password: <input name="newPassword" type="password" placeholder="New Password" /></p>
+			Confirm password: <input name="confPassword" type="password" placeholder="Confirm Password" />	
+			
+
+			<div>
+			<p><input type="submit" name="submit1" value="Change Password" class="button" /></p>
+			</div>
+		</form>
+
+		<br>
+		<h1>Create new administrator</h1>
+		Add new ArcadeFire.com administrator's details:
+		<p>
+		<br>
+		<form name="newUser" action="/createUser" method="post">
+			Username: <input name="newUsername" type="text" placeholder="New Username" /></p>
+		<p>Email: <input name="newEmail" type="text" placeholder="example@address.com" /></p>
+		<p>Password: <input name="newPass" type="password" placeholder="Temporary Password" /></p>
+		<p>Confirm: <input name="confPass" type="password" placeholder="Confirm Password" /></p>
+
+		<div>
+			<p><input type="submit" name="submit2" value="Create Account" class="button" /></p>
+		</div>
+	</form>
+
+	</div>
