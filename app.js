@@ -25,7 +25,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require ('passport-local').Strategy;
 var expressValidator = require('express-validator');
-mongoose.connect('mongodb://localhost/arcadeDB');
+mongoose.connect('mongodb://webtech:webtech@ds049337.mongolab.com:49337/arcadedb');
 var options = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem')
