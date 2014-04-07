@@ -25,7 +25,11 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require ('passport-local').Strategy;
 var expressValidator = require('express-validator');
-mongoose.connect('mongodb://webtech:webtech@ds049337.mongolab.com:49337/arcadedb');
+var uristring =
+process.env.MONGOLAB_URI ||
+process.env.MONGOHQ_URL ||
+'mongodb://localhost/arcadeDB';
+mongoose.connect(uristring);
 var options = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem')
@@ -306,7 +310,6 @@ if ('development' == app.get('env')) {
 
 //MAIN SITE PAGE
 app.get('/', function (req, res){
-
 
 	if(!dbIsOpen){		
 		console.log("db not open" );
