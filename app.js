@@ -27,7 +27,7 @@ app.engine('.html', require('ejs').renderFile);
 app.set('port', process.env.PORT || 443);
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'html');
-app.use(express.favicon());
+app.use(express.favicon('./public/img/favicon.ico'));
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
@@ -36,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 app.use('/public', express.static(__dirname + '/public'));
+
 
 app.configure(function(){
 	app.set('views', __dirname + '/views');
