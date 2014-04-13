@@ -2,14 +2,14 @@
 	<div>
 		<h1>About</h1>
 		<p>Edit Band Biography</p>
-		<% if (messages) { %><div class="success"><p><%= messages %></p></div><% } %>
+		<div id="success"><% if (messages) { %><p><%= messages %></p><% } %></div>
 		<form name="aboutpage" action="/UpdateBio" method="POST">
-			<textarea cols="100" rows="20" name="bio"><% bio.forEach( function( paragraphs ){ %><%=paragraphs.bio%><%=newLine%><% 
-	}); %></textarea>
+			<textarea cols="100" rows="20" name="bio"><% bio.forEach( function( paragraphs ){ %><%=paragraphs.bio%><%=newLine%><% }); %></textarea>
 			<br />
 			<p><input type="submit" value="Save" class="button"></p>
 
 		</form>
 	</div>
 
-	
+<script src="./js/jq.js"></script>
+<script src="./js/fade.js"></script>

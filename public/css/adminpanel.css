@@ -25,11 +25,11 @@ p h1 {
 
 .clear { clear: both; }
 
-.success {
+#success {
   color: #49a33e;
 }
 
-.err {
+#err {
   color: #a33e3e;
 }
 

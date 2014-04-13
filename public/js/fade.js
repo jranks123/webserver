@@ -1,3 +1,4 @@
-$(".success").delay(30).fadeOut("slow");
-
-$(".err").delay(30).fadeOut("slow");
+var message = $( '#success' );
+    setTimeout( function() {
+        message.fadeOut( 'fast' );
+    }, 3000 );

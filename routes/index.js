@@ -32,11 +32,14 @@ module.exports = function (app) {
 			console.log("Error: Database is not open.");				// break if database isn't 
 			return; 													// open to avoid site crashing
 		}
-		if(application.empty){		
-			console.log("DB empty. Forwarding to db setup..." );
-			res.redirect('./install');									// if there's nothing in the 
-		} else{															// database, install time!
-			function getScreen( url ){
+
+		application.db.collection('youtubevids').count(function (err, count) {
+			if (!err && count === 0) {									// if there's nothing in the 
+				console.log("DB empty. Forwarding to db setup..." );	// database, install time!
+				res.redirect('./install');		
+   			} else {														
+			  
+			  function getScreen( url ){
 			  if(url === null){ return ""; }
 			  var vid;
 			  var results;
@@ -68,6 +71,7 @@ module.exports = function (app) {
 				});
 			});
 		}
+		});
 	});
 
 

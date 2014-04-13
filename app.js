@@ -67,16 +67,8 @@ app.configure('development', function(){
 var db = module.exports.db = mongoose.connection;
 var dbIsOpen = module.exports.open = false;
 var dbEmpty = module.exports.empty = false;
-
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function callback (){
-	dbIsOpen = module.exports.open = true;
-	db.collection('youtubevids').count(function (err, count) {				//user can never make youtube vids
-    	if (!err && count === 0) {											//be empty so this must mean we 
-			console.log("Database is empty.")								//ready for a fresh install 
-			dbEmpty = module.exports.empty = true;
-    	}});
-});
+db.once('open', function callback (){ dbIsOpen = module.exports.open = true; });
 
 
 // dev env 
