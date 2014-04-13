@@ -9,12 +9,13 @@
 <body>
 <header>
   <div class="container">
-    <h1><a href="/">Arcade Fire</a></h1>
+    <h1>Arcade Fire</h1>
   </div>
 </header>
 <main role="main">
   <div class="container">
-      <h3><a href="/">Administrator Login</a></h3>
+      <h3>Administrator Login</h3>
+      <% if (fail) { %><p class="err"><%= fail%></p><% } %>
       <div> <form name="login-form" class="login-form" action="/login" method="post">
     <input name="username" type="text" class="input username" placeholder="Username" />
     <div class="user-icon"></div>

@@ -97,6 +97,11 @@
 				controller  : 'themesController'
 			})
 
+			.when('/siteadmin', {
+				templateUrl : 'content/siteadmin.html',
+				controller  : 'themesController'
+			})
+
 			.when('/account', {
 				templateUrl : 'content/user.html',
 				controller  : 'userController'

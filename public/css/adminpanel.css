@@ -25,6 +25,14 @@ p h1 {
 
 .clear { clear: both; }
 
+.success {
+  color: #49a33e;
+}
+
+.err {
+  color: #a33e3e;
+}
+
 #header {
   background: #5D7799;
   color: #fff;

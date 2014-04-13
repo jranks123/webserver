@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1><a>Installing JJ Content Management System</a></h1>
+  </div>
+</header>
+<main role="main">
+  <div class="container">
+      <h3>Welcome to JJ Content Management System set up.</h3> <p>Please create your core administrator account now:</p>
+      <div> <form name="login-form" class="login-form" action="/initialiseDatabase" method="post">
+    <input name="username" type="text" class="input username" placeholder="Username" />
+    <div class="user-icon"></div>
+    <input name="password" type="password" class="input password" placeholder="Password" />
+    <div class="pass-icon"></div>   
+    </div>
+
+    <div>
+    <input type="submit" name="submit" value="Register" class="button" />
+    </div>
+  
+  </form></div>
+</div>
+  </main>
+
+
+<footer>
+  <div class="container">
+    <p>This installation script is in demo form and is your only chance to create an account with a very short username and password. This is to help speed up the browsing proccess for marking! All other forms include strict validation regarding password creation. <p>
+  </div>
+</footer>
+
+</body>
+</html>

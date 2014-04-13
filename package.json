@@ -17,6 +17,9 @@
     "crypto": "*",
     "connect-flash": "*",
     "helmet": "*",
-    "node-fs": "*"
+    "node-fs": "*",
+    "email-templates": "0.0.5",
+    "express-validator": "*",
+    "nodemailer": "0.3.x"
   }
 }
