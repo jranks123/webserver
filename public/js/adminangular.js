@@ -102,6 +102,11 @@
 				controller  : 'themesController'
 			})
 
+			.when('/success', {
+				templateUrl : 'content/success.html',
+				controller  : 'themesController'
+			})
+
 			.when('/account', {
 				templateUrl : 'content/user.html',
 				controller  : 'userController'

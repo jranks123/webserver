@@ -1,4 +1,3 @@
-var message = $( '#success' );
-    setTimeout( function() {
-        message.fadeOut( 'fast' );
-    }, 3000 );
+$(function(){  // $(document).ready shorthand
+  $('.err').delay(2000).fadeOut('slow');
+});

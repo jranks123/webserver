@@ -81,7 +81,8 @@ module.exports = function(app) {
 					  if (err) {
 					    res.redirect('admin_panel#/failPassword'); //NOPE
 					  }else{
-					  	res.redirect('admin_panel#/account'); //YAY
+					  	req.flash('success', 'account' );
+					  	res.redirect('admin_panel#/success'); //YAY
 					  }
 				});
 			}else{
@@ -113,7 +114,8 @@ module.exports = function(app) {
 					hash 	 : hashNew,
 					email : req.body.newEmail
 					  }).save( function( err, tour, count ){
-					    res.redirect( 'admin_panel#/account' );
+					  	req.flash('success', 'account' );
+					    res.redirect( 'admin_panel#/success' );
 					  });
 			}else{
 				res.redirect('admin_panel#/failAddUser');

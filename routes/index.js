@@ -177,7 +177,6 @@ module.exports = function (app) {
 		  	res.render('./content/' + name, {
 		  		bio : bio,
 		  		newLine : '\n',
-		  		messages: req.flash('biosuccess')
 		  	});
 		  });
 		}
@@ -190,6 +189,11 @@ module.exports = function (app) {
 							tour : tour,
 							});
 					});
+		}
+		else if(name == "success.html"){
+			res.render('./content/'+name,{
+		  		page : req.flash('success')
+			});
 		}
 		else{
 			res.render('./content/'+name,{	
@@ -235,7 +239,8 @@ module.exports = function (app) {
 			  if (err) {
 			    console.log('Error updating vid3 in database');
 			  }else{
-	  			res.redirect('admin_panel#/video')	  	
+			  	req.flash('success', 'video' );
+	  			res.redirect('admin_panel#/success')	  	
 		  	  }
 	     	});	  	
 		  }
@@ -269,8 +274,8 @@ module.exports = function (app) {
 		  	 }).save(function( err, tour, count ){
 			  });
 		}
-		req.flash('biosuccess', 'Biography successfully updated!' )
-		res.redirect( 'admin_panel#/about' );
+		req.flash('success', 'about' );
+		res.redirect( 'admin_panel#/success' );
 	});
 
 

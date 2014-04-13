@@ -2,7 +2,6 @@
 	<div>
 		<h1>About</h1>
 		<p>Edit Band Biography</p>
-		<div id="success"><% if (messages) { %><p><%= messages %></p><% } %></div>
 		<form name="aboutpage" action="/UpdateBio" method="POST">
 			<textarea cols="100" rows="20" name="bio"><% bio.forEach( function( paragraphs ){ %><%=paragraphs.bio%><%=newLine%><% }); %></textarea>
 			<br />
@@ -10,6 +9,3 @@
 
 		</form>
 	</div>
-
-<script src="./js/jq.js"></script>
-<script src="./js/fade.js"></script>
